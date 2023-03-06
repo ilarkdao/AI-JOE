@@ -81,8 +81,7 @@
       }
     },
     methods: {
-			async clickWords(){
-				//生成福兔
+			async clickWords2(){
 				this.clickFlag = false
 			  try {
 					if(this.prompt == ''){
@@ -92,20 +91,26 @@
 						return	
 					}
 					this.isLoading = true  
-					//https://api.ilark.io/word
+					//https://api.ilark.io/word  
+					//url: this.api+'/word',
 					//http://localhost:6200
 					this.axios.request({
 							method: 'post',
-							url: this.api+'/word',
+							url: 'https://api.openai.com/v1/chat/completions',
+							headers: {
+								'X-Requested-With': 'XMLHttpRequest',
+								'Authorization': 'Bearer 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'
+								},
 							data:{
-								prompt: this.prompt,
-								temperature:0
+								model: "gpt-3.5-turbo",
+								messages: [{"role": "user", "content": this.prompt}]
 							}
 						})
 						.then(arg => {
 							this.isLoading = false
-							// console.log(699, arg.data)
-							this.answer = arg.data.bot
+							// console.log(699, JSON.parse(arg.request.response).choices[0].message.content)
+							console.log(699, arg)
+							this.answer = arg.data.choices[0].message.content
 							
 						})
 						.catch(error => {
@@ -120,6 +125,48 @@
 						this.successFlag = false
 						this.maskInfo = "错误！\n" + e
 			    } 
+		 },
+		  async clickWords(){
+				//prompt generator
+		 				this.clickFlag = false
+		 			  try {
+		 					if(this.prompt == ''){
+		 						this.showMask = true
+		 						this.successFlag = false
+		 						this.maskInfo = "文本不能为空！\n"
+		 						return	
+		 					}
+		 					this.isLoading = true  
+		 					//https://api.ilark.io/word  
+		 					//url: this.api+'/word',
+		 					//http://localhost:6200    
+		 					this.axios.request({
+		 							method: 'post',
+		 							url: this.api+'/generator',
+		 							data:{
+		 								prompt: this.prompt
+		 							}
+		 						})
+		 						.then(arg => {
+		 							this.isLoading = false
+		 							// console.log(699, JSON.parse(arg.request.response).choices[0].message.content)
+		 							console.log(699, arg)
+		 							// this.answer = arg.data.message
+									this.answer = arg.data.message
+		 							
+		 						})
+		 						.catch(error => {
+		 							this.showMask = true
+		 							this.isLoading = false
+		 							this.successFlag = false
+		 							this.maskInfo = "错误！\n" + error
+		 						})
+		 			  }catch(e){
+		 						this.showMask = true
+		 						this.isLoading = false
+		 						this.successFlag = false
+		 						this.maskInfo = "错误！\n" + e
+		 			    } 
 		 },
 		 copy(){
 		 	navigator.clipboard.writeText(this.answer)

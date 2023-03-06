@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Index from '../components/Index' 
+import Chatgpt from '../components/Chatgpt'
+import Ask from '../components/Ask'  
 import Translate from '../components/Translate' 
 import Code from '../components/Code' 
 import ExplainCode from '../components/ExplainCode'  
 import Interview from '../components/Interview' 
 import Continue from '../components/Continue'
-import Abstract from '../components/Abstract' 
+// import Abstract from '../components/Abstract' 
 import Rabbit from '../components/Rabbit' 
 import Words from '../components/Words'  
 import Image from '../components/Image'  
@@ -20,9 +21,15 @@ Vue.use(VueRouter)
 const routes = [
 	{
 	  path: '/',
-	  name: 'index',
-	  component: Index,
+	  name: 'chatgpt',
+	  component: Chatgpt,
 	},
+	{
+	  path: '/ask',
+	  name: 'ask',
+	  component: Ask,
+	},
+
 	{
 	  path: '/translate',
 	  name: 'translate',
@@ -48,11 +55,11 @@ const routes = [
 	  name: 'continue',
 	  component: Continue,
 	}, 
-	{
-	  path: '/abstract',
-	  name: 'abstract',
-	  component: Abstract,
-	}, 
+	// {
+	//   path: '/abstract',
+	//   name: 'abstract',
+	//   component: Abstract,
+	// }, 
 	{
 	  path: '/rabbit',
 	  name: 'rabbit',

@@ -86,7 +86,6 @@
     },
     methods: {
 			async clickWords(target){
-				//生成福兔
 				this.clickFlag = false
 			  try {
 					if(this.prompt == ''){
@@ -217,10 +216,19 @@ font-weight: 400 !important;
 
 
 .round-box{
-      border-radius: 20px;
-      border: 1px solid rgb(247, 248, 250);
-      padding:8px 14px;
-      margin-bottom: 1rem;
+	border-radius: 20px;
+	border: 1px solid gainsboro;
+	padding:8px 14px;
+	margin-bottom: 1rem;
+}
+textarea {
+	width: 100%;
+	color: darkgrey;
+	padding: 5px;
+	background: transparent;
+	border: none;
+	outline: none;
+	
 }
 
 .round-box-title-container{
@@ -342,6 +350,19 @@ font-weight: 400 !important;
 	.wordText{
 	  background-color: floralwhite;
 		padding:0.7rem;
+	}
+	@media only screen and (max-width:768px) {
+		.container{
+		  width: 98%;
+		  margin: 1rem auto;
+		  padding: 1.5rem 1rem 2rem 1rem;
+		  background-color: transparent;
+		  box-shadow: none;
+		  border-radius: 0px;
+		  display: block;
+		  z-index: 1;
+		}
+		 
 	}
 </style>
 

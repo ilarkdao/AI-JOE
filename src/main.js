@@ -19,6 +19,7 @@ Vue.config.productionTip = false
 
 //openai api server
 let api = "https://api.ilark.io"
+// let api = "http://43.154.196.227:6200"
 // let api = "http://localhost:6200"
 Vue.prototype.api = api
 

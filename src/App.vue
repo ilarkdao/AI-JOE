@@ -12,13 +12,14 @@
 			<b-collapse id="nav-collapse" is-nav>
 					<!-- Right aligned nav items -->
 					<b-navbar-nav class="ml-auto">
-						<router-link to="/">问道</router-link> 
+						<router-link to="/">ChatGPT</router-link> 
+						<router-link to="/ask">问道</router-link> 
 						<router-link to="/translate">翻译</router-link> 
 						<router-link to="/code">编程</router-link> 
 						<router-link to="/explaincode">解释代码</router-link>  
 						<router-link to="/interview">模拟面试</router-link>  
 						<router-link to="/continue">续写</router-link>   
-						<router-link to="/abstract">摘要</router-link>  
+						<!-- <router-link to="/abstract">摘要</router-link>  -->
 						<router-link to="/words">祝词</router-link>
 						<router-link to="/image">图像</router-link>
 						<router-link to="/advanced">高级</router-link>  
@@ -64,15 +65,15 @@
     height: 100%;
   }
   #app{
-    position:relative;
+    /* position:relative; */
     width:100%;
     min-height:100%;
-    padding-bottom: 5rem;
+    /* padding-bottom: 5rem; */
     /*padding-bottom: 7rem;*/
     box-sizing: border-box;
-    background-position: 0px -30vh;
-    background-repeat: no-repeat;
-    /*background-color: aliceblue;*/
+    /* background-position: 0px -30vh; */
+    /* background-repeat: no-repeat; */
+    /* background-color: red; */
   }
 
 
@@ -135,8 +136,7 @@
     white-space: nowrap;
     width: 100%;
   }
-
-
+ 
 
   .fade-enter,
   .fade-leave-active {
@@ -177,6 +177,7 @@
   #notice {
     padding: 1rem 5rem;
   }
+
 	
 	.mask{
 	    z-index: 2000;
@@ -250,6 +251,16 @@
 			#nav-collapse{
 			   margin-right: 1rem;
 			   /* background-color: blueviolet; */
+			}
+			.container{
+			  width: 85%;
+			  margin: 1rem auto;
+			  padding: 1.5rem 1rem 2rem 1rem;
+			  background-color: transparent;
+			  box-shadow: none;
+			  border-radius: 0px;
+			  display: block;
+			  z-index: 1;
 			}
 			
 	

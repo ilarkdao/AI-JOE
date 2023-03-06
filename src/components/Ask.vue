@@ -2,37 +2,40 @@
   <div class="container">
     <div  class="exchange">
         <!-- 上面的框   -->
-        <div class="round-box" v-if="clickFlag">	
-					<b-form-group label="我想在 ">
-						<b-form-radio-group
-							v-model="day"
-							:options="items"
-							name="radio-options"
-						></b-form-radio-group>
-					</b-form-group>
-					<b-form-group label="送给：">
-						<b-form-radio-group
-							v-model="word"
-							:options="wordItems"
-							name="radio-options2"
-						></b-form-radio-group>
-					</b-form-group>
-					
+        <div class="round-box" v-if="clickFlag">		
+					<div class="round-box-content-container" style="margin-top: -0.5rem;">	
+						<b-form-textarea
+							v-model="prompt"
+							placeholder="请输入你的问题或其它, 不宜超过70字"
+							rows="3"
+							max-rows="6"
+						></b-form-textarea>		
+					</div>
         </div>
-				<b-button  block pill variant="outline-primary" @click="clickWords" v-if="clickFlag">生成祝词</b-button>
+				<b-button  block pill variant="outline-primary" @click="clickWords" v-if="clickFlag">提交</b-button>
 				
 				<div v-if="!clickFlag">
 					<div style="margin-top: -1rem;margin-bottom: 1rem;">
-						我想在<span style="font-style: italic;"> {{day}} 送给 {{word}}</span> 的祝词：
+						<span style="font-style: italic;">{{prompt}}</span>
 					</div>
-					<div v-if="happyWord">
-						<div class="wordText">{{happyWord}}</div>
-							<b-button variant="link" @click="copy" style="font-size: 0.8rem;margin-right: 0.3rem;">复制</b-button>
-							<b-button variant="link" @click="more" style="font-size: 0.8rem;">再来一次</b-button>
-					 </div>
+					<div v-if="answer">
+						<!-- <div class="wordText">{{answer}}</div> -->
+						<mavon-editor
+							class="md"
+							:value="answer" 
+							:subfield = "prop.subfield"
+							:defaultOpen = "prop.defaultOpen"
+							:toolbarsFlag = "prop.toolbarsFlag"
+							:editable="prop.editable"
+							:scrollStyle="prop.scrollStyle"
+							></mavon-editor>
+						 <b-button variant="link" @click="copy" style="font-size: 0.8rem;margin-right: 0.3rem;">复制</b-button>
+						 <b-button variant="link" @click="more" style="font-size: 0.8rem;">再来一次</b-button>
+					  </div>
 					
         </div>
-      </div>
+
+    </div>
 
     <!--加载动画-->
     <transition name="fade">
@@ -63,57 +66,50 @@
 <script>
   import SmallLoading from './SmallLoading'
   export default {
-    text: "Words",
+    text: "Ask",
     data() {
       return {
         isLoading: true,
         showMask: false,
         maskInfo:'',
 		
-				day: '情人节',
-				items: [
-					{value: '情人节', text: '情人节'},
-					{value: '女神节', text: '女神节'},
-					{value: '劳动节', text: '劳动节'},
-					{value: '青年节', text: '青年节'},
-					{value: '母新节', text: '母新节'}
-				],
-				word: '情人',
-				wordItems: [
-					{value: '朋友', text: '朋友'},
-					{value: '老师', text: '老师'},
-					{value: '同事', text: '同事'},
-					{value: '领导', text: '领导'},
-					{value: '情人', text: '情人'}
-				],
 				clickFlag: true,
 				prompt: '',
-				happyWord: '',
+				answer: '',
 
 
       }
     },
     methods: {
 			async clickWords(){
-				//生成福兔
 				this.clickFlag = false
-			  try {			
-					this.isLoading = true
-					let prompt = "送给"+this.word+"的"+this.day+"祝词， 不少于80字。"
-					let query = [{role: "user", content: prompt}]
-					// console.log(133, prompt)
+			  try {
+					if(this.prompt == ''){
+						this.showMask = true
+						this.successFlag = false
+						this.maskInfo = "文本不能为空！\n"
+						return	
+					}
+					this.isLoading = true   
+					////[{role: "user", content: "Hello world"}]
+					let query = [{role: "user", content: this.prompt}]
+					// console.log(122, query)
+					
+					
+					//https://api.ilark.io/word
+					//http://localhost:6200
 					this.axios.request({
 							method: 'post',
 							url: this.api+'/gpt',
 							data:{
 								query: JSON.stringify(query),
-								temperature:0.5
+								temperature:0.2
 							}
 						})
 						.then(arg => {
 							this.isLoading = false
 							// console.log(699, arg.data)
-							this.happyWord = arg.data.message.content
+							this.answer = arg.data.message.content
 							
 						})
 						.catch(error => {
@@ -130,15 +126,16 @@
 			    } 
 		 },
 		 copy(){
-		 	navigator.clipboard.writeText(this.happyWord)
+		 	navigator.clipboard.writeText(this.answer)
 		 },
-		  more(){
+		 more(){
 			 this.clickFlag = true
-			 this.happyWord = ''
+			 this.prompt = ''
+			 this.answer = ''
 		  }, 
 		 
       hideMask(){
-        this.showMask = false
+        this.showMask=false
 				this.clickFlag = true
       }
 
@@ -147,9 +144,23 @@
     components: {
       SmallLoading,
     },
+		
+		computed: {
+			prop () {
+				let data = {
+					subfield: false,
+					defaultOpen: 'preview',
+					editable: false,
+					toolbarsFlag: false,
+					scrollStyle: true
+				}
+				return data
+			}
+		},
 
 		mounted() {
 			this.isLoading = false
+			
 
 		},
 
@@ -212,6 +223,16 @@ font-weight: 400 !important;
 	padding:8px 14px;
 	margin-bottom: 1rem;
 }
+textarea {
+	width: 100%;
+	color: darkgrey;
+	padding: 5px;
+	background: transparent;
+	border: none;
+	outline: none;
+	
+}
+
 .round-box-title-container{
      display: flex;
     flex-flow: row nowrap;
@@ -329,8 +350,7 @@ font-weight: 400 !important;
     background-color: crimson;
   }
 	.wordText{
-	  background-color: rgb(177, 43, 43);
-	  color: white;
+	  background-color: floralwhite;
 		padding:0.7rem;
 	}
 	@media only screen and (max-width:768px) {

@@ -2,7 +2,7 @@
   <div class="container">
     <div>
       <div class="changebox">
-        <p class='titleSelected' >从关键词句生成图像</p>
+        <p class='titleSelected'>从关键词句生成图像</p>
       </div>
 
       <div  class="exchange">
@@ -162,28 +162,18 @@
 .changebox{
   display: flex;
   justify-content: space-evenly;
-  padding: 1em;
+
 }
 
 .changebox p{
   font-weight: 400;
   color: darkgray;
   font-size: 1.2rem;
-  cursor: pointer;
 }
 
 .titleSelected{
 color: rgb(30, 30, 30) !important;
 font-weight: 500 !important;
-}
-
-.titleUnSelected{
-color: darkgray !important;
-font-weight: 400 !important;
-}
-
-.changebox p:hover{
-  color: rgb(92, 91, 91) !important;
 }
 
   .user{
@@ -193,10 +183,19 @@ font-weight: 400 !important;
 
 
 .round-box{
-      border-radius: 20px;
-			margin-top: -2rem;
-      border: 1px solid rgb(247, 248, 250);
-      margin-bottom: 1rem;
+	border-radius: 20px;
+	border: 1px solid gainsboro;
+	padding:8px 14px;
+	margin-bottom: 1rem;
+}
+textarea {
+	width: 100%;
+	color: darkgrey;
+	padding: 5px;
+	background: transparent;
+	border: none;
+	outline: none;
+	
 }
 
 .round-box-title-container{
@@ -315,5 +314,18 @@ font-weight: 400 !important;
     /*width: 50%;*/
     background-color: crimson;
   }
+	@media only screen and (max-width:768px) {
+		.container{
+		  width: 98%;
+		  margin: 1rem auto;
+		  padding: 1.5rem 1rem 2rem 1rem;
+		  background-color: transparent;
+		  box-shadow: none;
+		  border-radius: 0px;
+		  display: block;
+		  z-index: 1;
+		}
+		 
+	}
 </style>
 

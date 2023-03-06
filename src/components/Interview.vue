@@ -93,19 +93,20 @@
 					}
 					this.isLoading = true  //https://api.ilark.io/word   为我采访一位科幻小说作家创建一个8个问题的清单
 					let prompt = "为面试"+this.job+"创建一张10个问题的清单"
+					let query = [{role: "user", content: prompt}]
 					// console.log(133, prompt)
 					this.axios.request({
 							method: 'post',
-							url: this.api+'/word',
+							url: this.api+'/gpt',
 							data:{
-								prompt: prompt,
+								query: JSON.stringify(query),
 								temperature:0.7
 							}
 						})
 						.then(arg => {
 							this.isLoading = false
 							// console.log(699, arg.data)
-							this.answer = arg.data.bot
+							this.answer = arg.data.message.content
 							
 						})
 						.catch(error => {
@@ -213,10 +214,18 @@ font-weight: 400 !important;
 
 
 .round-box{
-      border-radius: 20px;
-      border: 1px solid rgb(247, 248, 250);
-      padding:8px 14px;
-      margin-bottom: 1rem;
+	border-radius: 20px;
+	border: 1px solid gainsboro;
+	padding:8px 14px;
+	margin-bottom: 1rem;
+}
+#input-1 {
+	width: 100%;
+	color: darkgrey;
+	background: transparent;
+	border: none;
+	outline: none;
+	
 }
 
 .round-box-title-container{
@@ -338,6 +347,19 @@ font-weight: 400 !important;
 	.wordText{
 	  background-color: floralwhite;
 		padding:0.7rem;
+	}
+	@media only screen and (max-width:768px) {
+		.container{
+		  width: 98%;
+		  margin: 1rem auto;
+		  padding: 1.5rem 1rem 2rem 1rem;
+		  background-color: transparent;
+		  box-shadow: none;
+		  border-radius: 0px;
+		  display: block;
+		  z-index: 1;
+		}
+		 
 	}
 </style>
 

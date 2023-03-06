@@ -4,7 +4,8 @@
 					<div style="margin-top: -1rem;margin-bottom: 1rem;">
 						  <div class="wordText">
 							<p><strong>简介</strong> <br>
-								AI·Joe，人工智能助手是基于OpenAI Api开发，对具体的应用场景和参数都做了调优。
+								AI·Joe，人工智能助手是基于OpenAI Api开发，对具体的应用场景和参数都做了调优。它开箱即用，预设了诸多场景，比如翻译、编程、续写、摘要等很实用的场景。
+						 在“高级”选项上做了调优，可以尝试些有创意的工作，比如让它写个短篇小说，剧本，策划书，诗歌……
 							 </p> 
 							 
 							 <p><strong>官网</strong> <br>
@@ -305,6 +306,19 @@ font-weight: 400 !important;
 	  /* background-color: floralwhite; */
 		padding:0.7rem;
 		padding-left: 1.5rem;
+	}
+	@media only screen and (max-width:768px) {
+		.container{
+		  width: 98%;
+		  margin: 1rem auto;
+		  padding: 1.5rem 1rem 2rem 1rem;
+		  background-color: transparent;
+		  box-shadow: none;
+		  border-radius: 0px;
+		  display: block;
+		  z-index: 1;
+		}
+		 
 	}
 </style>
 
