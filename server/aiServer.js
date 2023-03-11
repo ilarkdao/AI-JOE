@@ -1,10 +1,11 @@
-let express = require('express')
-let cors = require('cors')
-let { Configuration, OpenAIApi } = require('openai')
-
+import express from 'express'
+import cors from 'cors'
+import { Configuration, OpenAIApi } from 'openai'
+import hfRouter from './routes/huggingFace.js'
+import embedRouter from './routes/embeddings.js'
 
 const configuration = new Configuration({
-  apiKey: "your openai api key",
+  apiKey: "openai API KEY",
 })
 
 const openai = new OpenAIApi(configuration)
@@ -13,11 +14,41 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+app.use('/generator', hfRouter)
+app.use('/embeddings', embedRouter)
+
 app.get('/', async (req, res) => {
   res.status(200).send({
     message: 'Hello ilark AI!'
   })
 })
+
+//chatgpt api 
+app.post('/gpt', async (req, res) => {
+  try {
+    const query = req.body.query
+    const temperature = req.body.temperature
+
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: JSON.parse(query),
+      temperature: temperature, 
+      max_tokens: 4000, 
+      top_p: 1, 
+      frequency_penalty: 0, 
+      presence_penalty: 0, 
+    })
+
+    res.status(200).send({
+      message: response.data.choices[0].message
+    });
+
+  } catch (error) {
+    console.error(111, error)
+    res.status(500).send('Something went wrong')
+  }
+})
+
 
 app.post('/word', async (req, res) => {
   try {
@@ -40,8 +71,8 @@ app.post('/word', async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error)
-    res.status(500).send(error || 'Something went wrong');
+    console.error(112, error)
+    res.status(500).send('Something went wrong');
   }
 })
 
@@ -50,34 +81,32 @@ app.post('/advanced', async (req, res) => {
   try {
     const prompt = req.body.prompt
     const temperature = req.body.temperature
-    // console.log(166, req.body, 167, req.body.prompt)
 
     const response = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: `${prompt}`,
       temperature: temperature, 
-      max_tokens: 4000, 
+      max_tokens: 3000, 
       top_p: 1, 
       frequency_penalty: 0, 
       presence_penalty: 0, 
-    });
+    })
 
     res.status(200).send({
       bot: response.data.choices[0].text
     });
 
   } catch (error) {
-    console.error(error)
-    res.status(500).send(error || 'Something went wrong');
+    console.error(123, error)
+    res.status(500).send('Something went wrong');
   }
 })
 
 
 app.post('/code', async (req, res) => {
   try {
-    const prompt = req.body.prompt;
-    // console.log(166, req.body, 167, req.body.prompt)
-    // console.log(111, `${prompt}`)
+    const prompt = req.body.prompt
+
     const response = await openai.createCompletion({
       model: "code-davinci-002",
       prompt: `${prompt}`,
@@ -87,22 +116,22 @@ app.post('/code', async (req, res) => {
       frequency_penalty: 0.0,
       presence_penalty: 0.0,
       stop: ["\"\"\""],
-    });
+    })
     res.status(200).send({
       bot: response.data.choices[0].text
     });
 
   } catch (error) {
-    console.error(error)
-    res.status(500).send(error || 'Something went wrong');
+    console.error(233, error)
+    res.status(500).send('Something went wrong')
   }
 })
 
 
 app.post('/image', async (req, res) => {
   try {
-    const prompt = req.body.prompt;
-    // console.log(166, req.body, 167, req.body.prompt)
+    const prompt = req.body.prompt
+
     let response = await openai.createImage({
       prompt: `${prompt}`,
       n: 1,
@@ -113,8 +142,8 @@ app.post('/image', async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error)
-    res.status(500).send(error || 'Something went wrong');
+    console.error(244, error)
+    res.status(500).send('Something went wrong');
   }
 })
 

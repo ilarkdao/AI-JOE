@@ -33,15 +33,6 @@
   padding-bottom: 10px;
   scroll-behavior: smooth;
 }
-#chat_container2 {
-	margin-top: 1rem;
-	margin-bottom: 1rem;
-	padding: 0.5rem;
-  width: 100%;
-	color:whitesmoke;
-	background-color: brown;
-}
-
 
 /* hides scrollbar */
 #chat_container::-webkit-scrollbar {
@@ -99,6 +90,7 @@
   color: #dcdcdc;
   /* font-size: 20px; */
 
+
   max-width: 100%;
   overflow-x: scroll;
 
@@ -145,6 +137,11 @@ textarea {
   outline: none;
 	
 }
+textarea[disabled]{
+	/* background-color: red; */
+	background: transparent;
+	cursor:wait;
+}
 
 button {
   outline: 0;
@@ -152,11 +149,13 @@ button {
   cursor: pointer;
   background: transparent;
 }
+button[disabled]{
+	cursor:wait;
+}
 
 form img {
   width: 30px;
   height: 20px;
-
 }
 
  @media only screen and (max-width:768px) {

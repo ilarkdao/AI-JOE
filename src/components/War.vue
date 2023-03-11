@@ -1,9 +1,6 @@
 <template>
-  <div class="containerX">
-		<div id="app2">
-			<button @click="flapRestriction"><div id="chat_container2" v-if="restrictionFlag">
-			免费版每次输入的长度不宜超过70字, 且无法记住上下文！</div>
-			</button>
+  <div class="containerP">
+		<div id="app3">
 			<div id="chat_container"></div>
 			<form>
 				<textarea name="prompt" rows="1" cols="1" placeholder="和我聊聊吧..." :disabled='clickFlag'></textarea>
@@ -39,17 +36,17 @@
 
 <script>
   import SmallLoading from './SmallLoading'
-	import bot from '../assets/bot.svg'
+	import bot from '../assets/war.svg'
 	import user from '../assets/user.svg'
   export default {
-    text: "Chatgpt",
+    text: "War",
     data() {
       return {
         isLoading: true,
         showMask: false,
         maskInfo:'',
-				clickFlag: false,
-				restrictionFlag: ''
+				clickFlag: false
+
 
       }
     },
@@ -114,10 +111,6 @@
 		        // console.log(2, "end")
 		    })
 		  },
-			flapRestriction(){
-				this.restrictionFlag =  false
-				localStorage.setItem('restrictions', "true")
-			},
 			async submit(e){	
 				e.preventDefault()
 				let form = document.querySelector('form')
@@ -162,28 +155,28 @@
 				    }
 				}, 300)
 						
-				let query = [{role: "user", content: data.get('prompt')}]
+				// let query = [{role: "user", content: data.get('prompt')}]
 				// console.log(111, query)
 				// await this.sleep()
 
 				// let api = "http://43.154.196.227:6200/gpt" this.api+'/gpt'
-				const response = await fetch(this.api+'/gpt', {
+				const response = await fetch(this.api+'/embeddings/embeddingreq', {
 				    method: 'POST',
 				    headers: {
 				        'Content-Type': 'application/json',
 				    },
 				    body: JSON.stringify({
-				        query: JSON.stringify(query),
-								temperature: 0.5
+				        prompt: JSON.stringify(data.get('prompt'))
 				    })
 				})
 
 				clearInterval(loadInterval)
 				messageDiv.innerHTML = " "
-				
+				// console.log(123, "response", response)
 				if (response.ok) {
 				    const data = await response.json()
-						const parsedData = data.message.content.trim() // trims any trailing spaces/'\n' 
+						// console.log(233, "data", data)
+						const parsedData = data.bot.trim() // trims any trailing spaces/'\n' 
 				    this.typeText(messageDiv, parsedData)	
 					  this.clickFlag = false
 				} else {
@@ -214,13 +207,6 @@
 
 		mounted() {
 			this.isLoading = false
-			
-			//初始化限制
-			if(localStorage.getItem("restrictions") == null){
-				this.restrictionFlag = true
-			}else{
-				this.restrictionFlag = false
-			}
 
 		},
 
@@ -231,178 +217,195 @@
 
 <style scoped>
 	@import url("../../static/style.css");
-  .container{
-    width: 45%;
-    max-width: 620px;
-    min-width: 400px;
-    margin: 2.5rem auto;
-    padding: 1.5rem 1rem 2rem 1rem;
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.08) 0px 3px 30px, rgba(0, 0, 0, 0.04) 0px 4px 8px, rgba(0, 0, 0, 0.04) 3px 16px 24px, rgba(0, 0, 0, 0.01) 3px 24px 32px;
-    border-radius: 30px;
-    display: block;
-    z-index: 1;
-    box-sizing: border-box;
-  }
-.changebox{
-  display: flex; 
-  justify-content: space-evenly;
-  padding: 1em;
-}
-
-.changebox p{
-  font-weight: 400;
-  color: darkgray;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-.titleSelected{
-color: rgb(30, 30, 30) !important;
-font-weight: 500 !important;
-}
-
-.titleUnSelected{
-color: darkgray !important;
-font-weight: 400 !important;
-}
-
-.changebox p:hover{
-  color: rgb(92, 91, 91) !important;
-}
-
-  .user{
-    margin-top: 1rem;
-    width: 30rem;
-  }
-
-
-.round-box{
-      border-radius: 20px;
-      border: 1px solid rgb(247, 248, 250);
-      padding:8px 14px;
-      margin-bottom: 1rem;
-}
-
-.round-box-title-container{
-     display: flex;
-    flex-flow: row nowrap;
-    -webkit-box-align: center;
-    align-items: center;
-    color: rgb(0, 0, 0);
-    font-size: 0.75rem;
-    line-height: 1rem;;
-    box-sizing: border-box;
-    justify-content: space-between;
-    -webkit-box-pack: justify;
-    height: 100%;
-}
-.round-box-content-container{
-    display: flex;
-    flex-flow: row nowrap;
-    -webkit-box-align: center;
-    align-items: center;
-    color: rgb(0, 0, 0);
-    font-size: 1rem;
-    line-height: 1.2rem;;
-    box-sizing: border-box;
-    padding-top: 14px;
-    justify-content: space-between;
-    -webkit-box-pack: justify;
-    height: 100%;
-}
-
-.box-title{
-    box-sizing: border-box;
-    margin: 0px;
-    min-width: 0px;
-    font-weight: 500;
-    font-size: 14px;
-    color: rgb(86, 90, 105);
-}
-
-.input{
-  color: rgb(0, 0, 0);
-    width: 100%;
-    position: relative;
-    font-weight: 500;
-    outline: none;
-    border: none;
-    flex: 1 1 auto;
-    background-color: rgb(255, 255, 255);
-    font-size: 24px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 0px;
-    appearance: textfield;
-}
-
-
-  .confirm-box{
-    margin-top: 1em;
-    display: flex;
-    justify-content: space-around;
-  }
-
-  .mask{
-    z-index: 2000;
-    overflow: hidden;
-    display: flex;
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
- .mask-box{
-    position: relative;
-		max-width: 280px;
-    width: 100%;
-    background: rgb(255, 255, 255);
-    box-shadow: rgba(0, 0, 0, 0.08) 0px 3px 30px, rgba(0, 0, 0, 0.04) 0px 4px 8px, rgba(0, 0, 0, 0.04) 3px 16px 24px, rgba(0, 0, 0, 0.01) 3px 24px 32px;
-    border-radius: 10px;
-    padding: 1rem;
-    display: block;
-    z-index: 100;
-    box-sizing: border-box;
-    margin-top: -50vh;
- }
-
- .mask-info{
-   display: flex;
-   align-content: center;
- }
-
- .mask-info-text{
-   text-align: center;
-   width: 100%;
- }
-
-  .exchange{
-    /* width: 30rem; */
-    margin-top: 1rem;
-  }
-
-  .isok{
-    /*margin-top: 1.5rem;*/
-    /*width: 50%;*/
-    /*background-color: chartreuse;*/
-  }
-  .isfalse{
-    /*margin-top: 1.5rem;*/
-    /*width: 50%;*/
-    background-color: crimson;
-  }
-	.wordText{
-	  background-color: floralwhite;
-		padding:0.7rem;
+	  .container{
+	    width: 45%;
+	    max-width: 620px;
+	    min-width: 400px;
+	    margin: 2.5rem auto;
+	    padding: 1.5rem 1rem 2rem 1rem;
+	    background-color: white;
+	    box-shadow: rgba(0, 0, 0, 0.08) 0px 3px 30px, rgba(0, 0, 0, 0.04) 0px 4px 8px, rgba(0, 0, 0, 0.04) 3px 16px 24px, rgba(0, 0, 0, 0.01) 3px 24px 32px;
+	    border-radius: 30px;
+	    display: block;
+	    z-index: 1;
+	    box-sizing: border-box;
+	  }
+	.changebox{
+	  display: flex; 
+	  justify-content: space-evenly;
+	  padding: 1em;
 	}
+	
+	.changebox p{
+	  font-weight: 400;
+	  color: darkgray;
+	  font-size: 1.2rem;
+	  cursor: pointer;
+	}
+	
+	.titleSelected{
+	color: rgb(30, 30, 30) !important;
+	font-weight: 500 !important;
+	}
+	
+	.titleUnSelected{
+	color: darkgray !important;
+	font-weight: 400 !important;
+	}
+	
+	.changebox p:hover{
+	  color: rgb(92, 91, 91) !important;
+	}
+	
+	  .user{
+	    margin-top: 1rem;
+	    width: 30rem;
+	  }
+	
+	
+	.round-box{
+	      border-radius: 20px;
+	      border: 1px solid rgb(247, 248, 250);
+	      padding:8px 14px;
+	      margin-bottom: 1rem;
+	}
+	
+	.round-box-title-container{
+	     display: flex;
+	    flex-flow: row nowrap;
+	    -webkit-box-align: center;
+	    align-items: center;
+	    color: rgb(0, 0, 0);
+	    font-size: 0.75rem;
+	    line-height: 1rem;;
+	    box-sizing: border-box;
+	    justify-content: space-between;
+	    -webkit-box-pack: justify;
+	    height: 100%;
+	}
+	.round-box-content-container{
+	    display: flex;
+	    flex-flow: row nowrap;
+	    -webkit-box-align: center;
+	    align-items: center;
+	    color: rgb(0, 0, 0);
+	    font-size: 1rem;
+	    line-height: 1.2rem;;
+	    box-sizing: border-box;
+	    padding-top: 14px;
+	    justify-content: space-between;
+	    -webkit-box-pack: justify;
+	    height: 100%;
+	}
+	
+	.box-title{
+	    box-sizing: border-box;
+	    margin: 0px;
+	    min-width: 0px;
+	    font-weight: 500;
+	    font-size: 14px;
+	    color: rgb(86, 90, 105);
+	}
+	
+	.input{
+	  color: rgb(0, 0, 0);
+	    width: 100%;
+	    position: relative;
+	    font-weight: 500;
+	    outline: none;
+	    border: none;
+	    flex: 1 1 auto;
+	    background-color: rgb(255, 255, 255);
+	    font-size: 24px;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    padding: 0px;
+	    appearance: textfield;
+	}
+	
+	
+	  .confirm-box{
+	    margin-top: 1em;
+	    display: flex;
+	    justify-content: space-around;
+	  }
+	
+	  .mask{
+	    z-index: 2000;
+	    overflow: hidden;
+	    display: flex;
+	    position: fixed;
+	    left: 0;
+	    right: 0;
+	    top: 0;
+	    bottom: 0;
+	    -webkit-box-align: center;
+	    align-items: center;
+	    -webkit-box-pack: center;
+	    justify-content: center;
+	    background-color: rgba(0, 0, 0, 0.3);
+	}
+	
+	 .mask-box{
+	    position: relative;
+			max-width: 280px;
+	    width: 100%;
+	    background: rgb(255, 255, 255);
+	    box-shadow: rgba(0, 0, 0, 0.08) 0px 3px 30px, rgba(0, 0, 0, 0.04) 0px 4px 8px, rgba(0, 0, 0, 0.04) 3px 16px 24px, rgba(0, 0, 0, 0.01) 3px 24px 32px;
+	    border-radius: 10px;
+	    padding: 1rem;
+	    display: block;
+	    z-index: 100;
+	    box-sizing: border-box;
+	    margin-top: -50vh;
+	 }
+	
+	 .mask-info{
+	   display: flex;
+	   align-content: center;
+	 }
+	
+	 .mask-info-text{
+	   text-align: center;
+	   width: 100%;
+	 }
+	
+	  .exchange{
+	    /* width: 30rem; */
+	    margin-top: 1rem;
+	  }
+	
+	  .isok{
+	    /*margin-top: 1.5rem;*/
+	    /*width: 50%;*/
+	    /*background-color: chartreuse;*/
+	  }
+	  .isfalse{
+	    /*margin-top: 1.5rem;*/
+	    /*width: 50%;*/
+	    background-color: crimson;
+	  }
+		.wordText{
+		  background-color: floralwhite;
+			padding:0.7rem;
+		}
+		.containerP {
+		  background: #362A2A;
+		}
+		#app3 {
+		  width: 60vw;
+		  height: 90vh;
+		  background: #362A2A;
+		
+		  display: flex;
+		  flex-direction: column;
+		/*  align-items: center;
+		  justify-content: space-between; */
+		
+		 /* display: block; */
+			margin: 0 auto; 
+		}
+		
 </style>
 

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Chatgpt from '../components/Chatgpt'
-import Ask from '../components/Ask'  
+import War from '../components/War' 
 import Translate from '../components/Translate' 
 import Code from '../components/Code' 
 import ExplainCode from '../components/ExplainCode'  
@@ -15,6 +15,9 @@ import Image from '../components/Image'
 import Advanced from '../components/Advanced'  
 import Contact from '../components/Contact' 
 
+import ChatgptTest from '../components/ChatgptTest'
+
+
 
 Vue.use(VueRouter)
 
@@ -25,9 +28,14 @@ const routes = [
 	  component: Chatgpt,
 	},
 	{
-	  path: '/ask',
-	  name: 'ask',
-	  component: Ask,
+	  path: '/test',
+	  name: 'chatgpttest',
+	  component: ChatgptTest,
+	},
+	{
+	  path: '/war',
+	  name: 'war',
+	  component: War,
 	},
 
 	{

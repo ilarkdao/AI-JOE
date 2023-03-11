@@ -13,7 +13,7 @@
 					<!-- Right aligned nav items -->
 					<b-navbar-nav class="ml-auto">
 						<router-link to="/">ChatGPT</router-link> 
-						<router-link to="/ask">问道</router-link> 
+						<router-link to="/war">俄乌"砖家"</router-link> 
 						<router-link to="/translate">翻译</router-link> 
 						<router-link to="/code">编程</router-link> 
 						<router-link to="/explaincode">解释代码</router-link>  

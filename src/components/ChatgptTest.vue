@@ -66,7 +66,7 @@
 <script>
   import SmallLoading from './SmallLoading'
   export default {
-    text: "Index",
+    text: "ChatgptTest",
     data() {
       return {
         isLoading: true,
@@ -81,7 +81,7 @@
       }
     },
     methods: {
-			async clickWords2(){
+			async clickWords44(){
 				this.clickFlag = false
 			  try {
 					if(this.prompt == ''){
@@ -96,21 +96,26 @@
 					//http://localhost:6200
 					this.axios.request({
 							method: 'post',
-							url: 'https://api.openai.com/v1/chat/completions',
+							// url: 'https://api.openai.com/v1/chat/completions',
+							url: 'https://api.openai.com/v1/embeddings',
 							headers: {
 								'X-Requested-With': 'XMLHttpRequest',
-								'Authorization': 'Bearer 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'
+								'Authorization': 'Bearer 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'
 								},
 							data:{
-								model: "gpt-3.5-turbo",
-								messages: [{"role": "user", "content": this.prompt}]
+								// model: "gpt-3.5-turbo",
+								// messages: [{"role": "user", "content": this.prompt}]
+								model: "text-embedding-ada-002",
+								input: this.prompt
+								
 							}
 						})
 						.then(arg => {
 							this.isLoading = false
 							// console.log(699, JSON.parse(arg.request.response).choices[0].message.content)
 							console.log(699, arg)
-							this.answer = arg.data.choices[0].message.content
+							// this.answer = arg.data.choices[0].message.content
+							this.answer = "test"
 							
 						})
 						.catch(error => {
@@ -136,13 +141,15 @@
 		 						this.maskInfo = "文本不能为空！\n"
 		 						return	
 		 					}
+							console.log(123, this.prompt)
 		 					this.isLoading = true  
 		 					//https://api.ilark.io/word  
 		 					//url: this.api+'/word',
-		 					//http://localhost:6200    
+		 					//http://localhost:6200   
+							 //url: this.api+'/embeddings/saveembedding',
 		 					this.axios.request({
 		 							method: 'post',
-		 							url: this.api+'/generator',
+		 							url: this.api+'/embeddings/saveembedding',
 		 							data:{
 		 								prompt: this.prompt
 		 							}
@@ -152,10 +159,12 @@
 		 							// console.log(699, JSON.parse(arg.request.response).choices[0].message.content)
 		 							console.log(699, arg)
 		 							// this.answer = arg.data.message
-									this.answer = arg.data.message
+									// this.answer = arg.data.message
+									this.answer = arg.data.result
 		 							
 		 						})
 		 						.catch(error => {
+									console.log(555, error)
 		 							this.showMask = true
 		 							this.isLoading = false
 		 							this.successFlag = false
