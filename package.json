@@ -1,29 +1,19 @@
 {
-  "name": "ai-joe",
-  "version": "1.0.0",
+  "name": "aijoe-v3",
+  "author": "lemooljiang",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "bootstrap": "^4.4.1",
-    "bootstrap-vue": "^2.1.0",
-    "mavon-editor": "^2.10.4",
-    "vue": "^2.6.10",
-    "vue-router": "^3.1.3",
-    "vuex": "^3.1.2"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.1.0",
-    "@vue/cli-plugin-router": "^4.1.0",
-    "@vue/cli-plugin-vuex": "^4.1.0",
-    "@vue/cli-service": "^4.1.0",
-    "vue-template-compiler": "^2.6.10"
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ]
+    "@huntersofbook/naive-ui-nuxt": "^1.0.0",
+    "@iconify-json/mdi": "^1.1.52",
+    "@types/node": "^18",
+    "@unocss/nuxt": "^0.52.6",
+    "nuxt": "^3.5.2"
+  }
 }
