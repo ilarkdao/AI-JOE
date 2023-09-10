@@ -1,6 +1,19 @@
 <template>
   <div class="subContainer"> 
     <div id="appcode"> 
+      <!-- 模型 -->
+      <div flex items-center> 
+        <div w-25 flex items-center>
+          <p mr-2>预设模型 </p> 
+          <n-popover trigger="hover" >
+            <template #trigger>
+              <div class="i-mdi-alpha-i-circle" hidden lg:flex/>
+            </template>
+            <span>选择合适的语言模型有利于更为精准的结果</span>
+          </n-popover>
+        </div>
+        <Models ref="ModelRef"></Models> 
+      </div> 
       <n-input
         v-model:value="prompt"
         type="textarea"
@@ -8,16 +21,16 @@
         placeholder="请输入你的需求......"
       />
       <div text-center  pb-2 v-if="!clickFlag">
-        <n-button mt-2 mr-2 type="primary"  @click="submit('用JavaScript实现以下需求：\n\n')" >
+        <n-button mt-2 mr-2 type="primary"  @click="submit('The following requirements are implemented in JavaScript:\n\n')" >
           JS实现
         </n-button>
-        <n-button mt-2 mr-2 type="primary" @click="submit('用Python实现以下需求：\n\n')" >
+        <n-button mt-2 mr-2 type="primary" @click="submit('The following requirements are implemented in Python:\n\n')" >
           Python实现
         </n-button>
-        <n-button mt-2 mr-2 type="primary" @click="submit('用Golang实现以下需求：\n\n')" >
+        <n-button mt-2 mr-2 type="primary" @click="submit('The following requirements are implemented in Golang:\n\n')" >
           Golang实现
         </n-button>
-        <n-button mt-2 mr-2 type="primary" @click="submit('用Solidity实现以下需求：\n\n')" >
+        <n-button mt-2 mr-2 type="primary" @click="submit('The following requirements are implemented in Solidity:\n\n')" >
           Solidity实现
         </n-button>
         <n-button mt-2 mr-2 w-40  type="primary"> 
@@ -65,17 +78,24 @@ const chatStripe = (isAi, value, uniqueId) => {
   )
 }
 
+// 切换模型
+let ModelRef = ref(null)
+
 const clickFlag = ref(false)
 const prompt = ref('')
 const languageValue = ref('')
 if(process.client){
   let lastname = localStorage.getItem("languageValue")
-  console.log(566, "lastname", lastname)
+  // console.log(566, "lastname", lastname)
   if(lastname != null){
     languageValue.value = lastname
-    console.log(599, "lastname")
+    // console.log(599, "lastname")
   }
 }
+
+let round = 1
+let history = []
+let historyX = [] //上传API
 
 const submit = async(target) => {	
   if(!token.value){
@@ -86,7 +106,30 @@ const submit = async(target) => {
     message.error("文本不能为空！", { duration: 5e3 })
     return
   }
+
+  let model = ModelRef.value.defaultModel
+  //更新model 如果与前值不同，就重新赋值
+  let setModel = localStorage.getItem("setModel")
+  if(model != setModel){
+    localStorage.setItem('setModel', model)
+    // console.log(899, "set model", model)
+  }
+
   clickFlag.value = true
+  //先判断是不是中文 ，如果中文长度过长，则截取最后两轮
+  if(round > 1){
+    let str = JSON.stringify(history)
+    let isChinese = /.*[\u4e00-\u9fa5]+.*$/.test(prompt.value) 
+    // console.log(256, "isChinese", isChinese, prompt.value)
+    if(isChinese && str.length > max_zh_length){
+      history = history.slice(-4)
+    }
+    if(!isChinese && str.length > max_en_length){
+      history = history.slice(-4)
+    }
+    // console.log(322, "round", round, "str.length", str.length)
+  } 
+
   let chatContainer = document.querySelector('#chat_container')
   
   // user's chatstripe
@@ -100,8 +143,6 @@ const submit = async(target) => {
   const uniqueIdX = generateUniqueId()
   chatContainer.innerHTML += loadingStripe(uniqueIdX)
   
-  // to focus scroll to the bottom
-  chatContainer.scrollTop = chatContainer.scrollHeight
   
   // specific message div
   const messageDiv = document.getElementById(uniqueId)
@@ -117,8 +158,14 @@ const submit = async(target) => {
           loading.textContent = '...'
       }
   }, 300)
-      
-  let query = [{role: "user", content: target+prompt.value}]
+
+  // to focus scroll to the bottom
+  chatContainer.scrollTop = chatContainer.scrollHeight
+
+  historyX = history.slice()
+  history.push({role: "user", content: prompt.value})
+  historyX.push({role: "user", content: target+prompt.value})
+  // let query = [{role: "user", content: target+prompt.value}]
   let dataObj = {
       method: 'POST',
       headers: {
@@ -126,13 +173,14 @@ const submit = async(target) => {
           'Authorization': 'Bearer ' + token.value
       },
       body: JSON.stringify({
-          query: query,
+          model: model,
+          query: historyX,
           temperature: 0.2
       })
   }
   //to clear the textarea input 
   prompt.value = '' 
-  const response = await fetch(baseURL+'/gptstreaming', dataObj)
+  const response = await fetch(baseURL+'/streaming', dataObj)
   messageDiv.innerHTML = " "
   if (response.ok) {	
       let i = 0
@@ -144,6 +192,7 @@ const submit = async(target) => {
               clickFlag.value = false
               clearInterval(loadInterval)  
               loading.textContent = ''
+              history.push({ 'role': 'assistant', 'content': messageDiv.innerHTML})
               return
             }
             // 取出本段数据（二进制格式）
@@ -157,13 +206,14 @@ const submit = async(target) => {
             }
             // 将本段数据追加到网页之中
             messageDiv.innerHTML += text
+            chatContainer.scrollTop = chatContainer.scrollHeight
             i ++
             // 递归处理下一段数据
             return getStream(reader)
           })
       }
       getStream(response.body.getReader())
-      
+      round ++ 
   } else {
       const err = await response.text()
       clickFlag.value = false
@@ -177,16 +227,17 @@ const otherSubmit = async () => {
     message.error("语言项不能为空！", { duration: 5e3 })
     return
   }
-  //('用Solidity实现以下需求：\n\n')
+
   let lastname = localStorage.getItem("languageValue")
   //设置或更新
   if(lastname == null || languageValue.value != lastname){
     localStorage.setItem('languageValue', languageValue.value)
-    console.log(899, "set lastname")
+    // console.log(899, "set lastname")
   }
-  console.log(63, "otherSubmit", languageValue.value)
-
-  let target = '用'+languageValue.value+'实现以下需求：\n\n'
+  // console.log(63, "otherSubmit", languageValue.value)
+  
+  //The following requirements are implemented in JavaScript
+  let target = 'The following requirements are implemented in '+languageValue.value+': \n\n'
   await submit(target)
 }
 </script>

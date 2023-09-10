@@ -42,11 +42,11 @@
       </div>
 
       <div v-if="!clickFlag">
-        <div text-rose mb-2 v-if="imgmodel == 'stable'">Stable Diffusion模型请使用英文关键词！</div>
+        <div text-rose mb-2 v-if="imgmodel == 'stable'">Stable Diffusion模型请尽量使用英文关键词！</div>
         <n-input
           v-model:value="prompt"
           type="textarea"
-          placeholder="请输入关键词句，例如：请创作一幅山水人物画，画面以当代的北京为背景，有大量的人物、船只、建筑、动物等元素"
+          placeholder="input image prompt......"
         />
         <n-button block mt-4 items-center type="primary" @click="onSubmit">
           生成图像
@@ -81,16 +81,17 @@ useHead({
   title:"图像"
 })
 // 图片模型
-const imgmodel = ref("dall")
+const imgmodel = ref("stable")
 const options = [
+  {
+    label: "Stable Diffusion XL 1.0",
+    value: "stable"
+  },
   {
     label: "Dall E2",
     value: "dall",
-  },
-  {
-    label: "Stable Diffusion 768 v2",
-    value: "stable"
-  }]
+  }
+  ]
 // 图片数量
 const checkedNum = ref('1')
 const handleChange = (e) => {

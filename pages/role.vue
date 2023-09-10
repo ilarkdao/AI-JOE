@@ -1,8 +1,21 @@
 <template>
   <div class="subContainer"> 
     <div id="appcode"> 
+      <!-- 模型 -->
+      <div flex items-center> 
+        <div w-25 flex items-center>
+          <p mr-2>预设模型 </p> 
+          <n-popover trigger="hover" >
+            <template #trigger>
+              <div class="i-mdi-alpha-i-circle" hidden lg:flex/>
+            </template>
+            <span>选择合适的语言模型有利于更为精准的结果</span>
+          </n-popover>
+        </div>
+        <Models ref="ModelRef"></Models> 
+      </div>
       <!-- 角色 -->
-      <div flex mb-2 items-center > 
+      <div flex mt--3 items-center > 
         <div w-25 flex items-center>
           <p mr-2>预订角色 </p> 
           <n-popover trigger="hover" >
@@ -22,7 +35,7 @@
       />
       <div text-center mt-2 pb-2>
         <n-button block mr-2 type="primary" @click="submit" :loading = "clickFlag">
-          提交
+          提问
         </n-button>
       </div>
 
@@ -69,22 +82,35 @@ const chatStripe = (isAi, value, uniqueId) => {
     `
   )
 }
+
+// 切换模型
+let ModelRef = ref(null)
 // 切换角色 
 let RoleRef = ref(null)
 
 const clickFlag = ref(false)
 const prompt = ref('')
 const noteFlag = ref(true)
-
+let round = 1
+let history = []
+let historyX = [] //上传API
 const submit = async(e) => {	
   e.preventDefault()
   if(!token.value){
     message.error("您尚未登录， 呜呜~~", { duration: 5e3 })
     return
   }
+
+  let model = ModelRef.value.defaultModel
+  // console.log(122, "model", model) 
+  //更新model 如果与前值不同，就重新赋值
+  let setModel = localStorage.getItem("setModel")
+  if(model != setModel){
+    localStorage.setItem('setModel', model)
+    // console.log(899, "set model", model)
+  }
   let role = RoleRef.value.defaultRole
   // console.log(122, "role", role) 
-  
   //设置或更新 如果是空值 或是与前值不同，都重新赋值
   let latest = localStorage.getItem("defaultRole")
   if(latest == null || role != latest){
@@ -97,7 +123,20 @@ const submit = async(e) => {
     message.error("文本不能为空！", { duration: 5e3 })
     return
   }
-  clickFlag.value = true    
+  clickFlag.value = true  
+  //先判断是不是中文 ，如果中文长度过长，则截取最后两轮
+  if(round > 1){
+    let str = JSON.stringify(history)
+    let isChinese = /.*[\u4e00-\u9fa5]+.*$/.test(prompt.value) 
+    // console.log(256, "isChinese", isChinese, prompt.value)
+    if(isChinese && str.length > max_zh_length){
+      history = history.slice(-4)
+    }
+    if(!isChinese && str.length > max_en_length){
+      history = history.slice(-4)
+    }
+    // console.log(322, "round", round, "str.length", str.length)
+  } 
 
   let chatContainer = document.querySelector('#chat_container')
   
@@ -112,9 +151,6 @@ const submit = async(e) => {
   const uniqueIdX = generateUniqueId()
   chatContainer.innerHTML += loadingStripe(uniqueIdX)
   
-  // to focus scroll to the bottom
-  chatContainer.scrollTop = chatContainer.scrollHeight
-
   // specific message div
   const messageDiv = document.getElementById(uniqueId)
 
@@ -129,9 +165,14 @@ const submit = async(e) => {
           loading.textContent = '...'
       }
   }, 300)
+
+  // to focus scroll to the bottom
+  chatContainer.scrollTop = chatContainer.scrollHeight
       
-  let query = [{role: "user", content: role+prompt.value}]
-  // console.log(899, "query", query)
+  historyX = history.slice()
+  history.push({role: "user", content: prompt.value})
+  historyX.push({role: "user", content: role+prompt.value})
+  // console.log(5682, "history", history)
   // return
   let dataObj = {
       method: 'POST',
@@ -140,14 +181,15 @@ const submit = async(e) => {
           'Authorization': 'Bearer ' + token.value
       },
       body: JSON.stringify({
-          query: query,
+          model: model,
+          query: historyX,
           temperature: 0.6
       })
   }
 
   //to clear the textarea input 
   prompt.value = ''
-  const response = await fetch(baseURL+'/gptstreaming', dataObj)
+  const response = await fetch(baseURL+'/streaming', dataObj)
   // console.log(456, "response", response)
 
   messageDiv.innerHTML = " "
@@ -161,6 +203,8 @@ const submit = async(e) => {
               clickFlag.value = false
               clearInterval(loadInterval)  
               loading.textContent = ''
+              history.push({ 'role': 'assistant', 'content': messageDiv.innerHTML})
+              // console.log(889, "history", history)
               return
             }
             // 取出本段数据（二进制格式）
@@ -174,16 +218,19 @@ const submit = async(e) => {
             }
             // 将本段数据追加到网页之中
             messageDiv.innerHTML += text
+            chatContainer.scrollTop = chatContainer.scrollHeight
             i ++
             // 递归处理下一段数据
             return getStream(reader)
           })
       }
       getStream(response.body.getReader())
-      
+      round ++ 
   } else {
       const err = await response.text()
       clickFlag.value = false
+      clearInterval(loadInterval)  
+      loading.textContent = ''
       messageDiv.innerHTML = "Something went wrong"
       message.error("错误！\n"+err, { duration: 5e3 })
   }

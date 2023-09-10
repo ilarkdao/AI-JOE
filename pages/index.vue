@@ -2,8 +2,23 @@
   <div class="subContainer">
 		<div id="app2">
 			<div id="chat_container"></div>  
+
+      <!-- 模型 -->
+      <div flex items-center> 
+        <div w-25 flex items-center>
+          <p mr-2>预设模型 </p> 
+          <n-popover trigger="hover" >
+            <template #trigger>
+              <div class="i-mdi-alpha-i-circle" hidden lg:flex/>
+            </template>
+            <span>选择合适的语言模型有利于更为精准的结果</span>
+          </n-popover>
+        </div>
+        <Models ref="ModelRef"></Models> 
+      </div> 
+
 			<form>
-				<textarea name="prompt" rows="1" cols="1" placeholder="请输入你的问题..." :disabled='clickFlag'></textarea>
+				<textarea name="prompt" rows="2" cols="1" placeholder="请输入你的问题..." :disabled='clickFlag'></textarea>
 				<button @click="submit" :disabled='clickFlag'><img src="@/assets/img/send.svg" alt="send" /></button>		
 			</form>
 		</div>
@@ -44,9 +59,12 @@ const chatStripe = (isAi, value, uniqueId) => {
   )
 }
 
+// 切换模型
+let ModelRef = ref(null)
+
 let clickFlag = ref(false)
 let prompt = ref('')
-let history = [ {role: "system", content: "You are a helpful assistant."}]
+let history = []
 let round = 1
 const submit = async(e) => {	
   e.preventDefault()
@@ -54,26 +72,36 @@ const submit = async(e) => {
     message.error("您尚未登录， 呜呜~~", { duration: 5e3 })
     return
   }
+
+  let model = ModelRef.value.defaultModel
+  // console.log(122, "model", model) 
+  //更新model 如果与前值不同，就重新赋值
+  let setModel = localStorage.getItem("setModel")
+  if(model != setModel){
+    localStorage.setItem('setModel', model)
+    // console.log(899, "set model", model)
+  }
   
   let form = document.querySelector('form')
   let chatContainer = document.querySelector('#chat_container')
   
   let data = new FormData(form)
+  let ask = data.get('prompt')
 
-  if(data.get('prompt') == ''){
+  if(ask == ''){
     message.error("文本不能为空！", { duration: 5e3 })
     return
   }
-  //先判断是不是中文 ，如果中文长度过长，则重置
-  if(round > 0){
+  // 先判断是不是中文 ，如果中文长度过长，则截取最后两轮
+  if(round > 1){
     let str = JSON.stringify(history)
-    let isChinese = /.*[\u4e00-\u9fa5]+.*$/.test(data.get('prompt')) 
-    // console.log(256, "isChinese", isChinese, data.get('prompt'))
-    if(isChinese && str.length > 1600){
-      history = [ {role: "system", content: "You are a helpful assistant."}]
+    let isChinese = /.*[\u4e00-\u9fa5]+.*$/.test(ask) 
+    // console.log(256, "isChinese", isChinese, ask)
+    if(isChinese && str.length > max_zh_length){
+      history = history.slice(-4)
     }
-    if(!isChinese && str.length > 11000){
-      history = [ {role: "system", content: "You are a helpful assistant."}]
+    if(!isChinese && str.length > max_en_length){
+      history = history.slice(-4)
     }
     // console.log(322, "history", history, "round", round, "str.length", str.length)
   }
@@ -93,9 +121,6 @@ const submit = async(e) => {
   const uniqueIdX = generateUniqueId()
   chatContainer.innerHTML += loadingStripe(uniqueIdX)
   
-  // to focus scroll to the bottom
-  chatContainer.scrollTop = chatContainer.scrollHeight
-  
   // specific message div
   const messageDiv = document.getElementById(uniqueId)
   
@@ -111,8 +136,12 @@ const submit = async(e) => {
           loading.textContent = '...'
       }
   }, 300)
+
+  // to focus scroll to the bottom
+  chatContainer.scrollTop = chatContainer.scrollHeight
       
-  history.push({role: "user", content: data.get('prompt')})
+  history.push({role: "user", content: ask})
+  // console.log(5668, "history", history)
   let dataObj = {
       method: 'POST',
       headers: {
@@ -120,12 +149,13 @@ const submit = async(e) => {
           'Authorization': 'Bearer ' + token.value
       },
       body: JSON.stringify({
+          model: model,
           query: history,
           temperature: 0.2
       })
   }
 
-  const response = await fetch(baseURL+'/gptstreaming', dataObj)
+  const response = await fetch(baseURL+'/streaming', dataObj)
   messageDiv.innerHTML = " "
   if (response.ok) {	
       let i = 0
@@ -152,6 +182,7 @@ const submit = async(e) => {
             }
             // 将本段数据追加到网页之中
             messageDiv.innerHTML += text
+            chatContainer.scrollTop = chatContainer.scrollHeight
             i ++
             // 递归处理下一段数据
             return getStream(reader)
@@ -163,6 +194,8 @@ const submit = async(e) => {
   } else {
       const err = await response.text()
       clickFlag.value = false
+      clearInterval(loadInterval)  
+      loading.textContent = ''
       messageDiv.innerHTML = "Something went wrong"
       message.error("错误！\n"+err, { duration: 5e3 })
   }

@@ -1,7 +1,7 @@
 export const sleep = async() => {
   return new Promise(resolve => {
       // console.log(1, "start")
-      setTimeout(resolve, 2000)  //2秒
+      setTimeout(resolve, 500)  //0.5秒
       // console.log(2, "end")
   })
 }
