@@ -88,6 +88,9 @@ const menus = [{
 },{
     name:"图像",
     path:"/image"
+},{
+    name:"设计",
+    path:"/design/portrait"
 }]
 
 const navTo = path => navigateTo(path)

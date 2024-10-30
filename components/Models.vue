@@ -9,26 +9,58 @@
 <script setup>
 const options = [
   {
+    label: "OpenAI o1-preview",
+    value: "openai/o1-preview",
+  },
+  {
+    label: "OpenAI o1-mini",
+    value: "openai/o1-mini",
+  },
+  {
+    label: "GPT-4o-mini",
+    value: "openai/gpt-4o-mini",
+  },
+  {
+    label: "GPT-4o",
+    value: "openai/gpt-4o",
+  },
+  {
+    label: "GPT-4 Turbo",
+    value: "openai/gpt-4-turbo",
+  },
+  {
     label: "GPT-3.5 Turbo",
-    value: "gpt-3.5-turbo",
+    value: "openai/gpt-3.5-turbo",
   },
   {
-    label: "GPT-4",
-    value: "gpt-4",
+    label: "Google: Gemma 7B",
+    value: "google/gemma-7b-it:nitro"
   },
   {
-    label: "Claude v2",
-    value: "anthropic/claude-2",
-    disabled: true
+    label: "Google: Gemini Pro",
+    value: "google/gemini-pro"
   },
   {
-    label: "Code Llama Instruct (仅英文)",
+    label: "Google: PaLM2 Chat",
+    value: "google/palm-2-chat-bison"
+  },
+  {
+    label: "Meta: CodeLlama 34B Instruct",
     value: "meta-llama/codellama-34b-instruct",
+  },
+  {
+    label: "Yi 34B Chat",
+    value: "01-ai/yi-34b-chat",
+  },
+  {
+    label: "Perplexity PPLX 70B Online",
+    value: "perplexity/pplx-70b-online",
   }]
 
-const defaultModel = ref("gpt-3.5-turbo")
+const defaultModel = ref("openai/o1-preview")
 if(process.client){
-  let setModel = localStorage.getItem("setModel")
+  // console.log("111, llms", llms)
+  let setModel = localStorage.getItem(llms)
   if(setModel != null){
     defaultModel.value = setModel
   }

@@ -109,9 +109,9 @@ const submit = async(target) => {
 
   let model = ModelRef.value.defaultModel
   //更新model 如果与前值不同，就重新赋值
-  let setModel = localStorage.getItem("setModel")
+  let setModel = localStorage.getItem(llms)
   if(model != setModel){
-    localStorage.setItem('setModel', model)
+    localStorage.setItem(llms, model)
     // console.log(899, "set model", model)
   }
 
@@ -204,6 +204,7 @@ const submit = async(target) => {
             } else{
               text = text.replace(/\\n/g,'<br/>')
             }
+            text = text.replace(/\*/g,'')  //去除 *
             // 将本段数据追加到网页之中
             messageDiv.innerHTML += text
             chatContainer.scrollTop = chatContainer.scrollHeight
