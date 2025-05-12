@@ -163,7 +163,6 @@ const submit = async(e) => {
           return reader.read().then(function (result) {
             // 如果数据已经读取完毕，直接返回
             if (result.done) {
-              // console.log(889, "result done")
               clickFlag.value = false
               clearInterval(loadInterval)  
               loading.textContent = ''
@@ -178,7 +177,7 @@ const submit = async(e) => {
             if(i === 0){
               text = text.replace(/\\n/g,'')  //去除首段换行
             } else{
-              text = text.replace(/\\n/g,'<br/>')
+              text = text.replace(/\\n/g,'<br/>')  //替换换行符
             }
             text = text.replace(/\*/g,'')  //去除 *
             text = text.replace(/\#/g,'')  //去除 #

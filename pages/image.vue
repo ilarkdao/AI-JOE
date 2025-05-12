@@ -16,7 +16,7 @@
           <template #trigger>
             <div class="i-mdi-alpha-i-circle" hidden lg:flex mr-2/>  
           </template>
-          <span>GPT4优化会先调用GPT4接口对输入的关键词进行优化，并翻译成英文</span>
+          <span>AI自动关键词会先调用o1-mini接口对输入的关键词进行优化，并翻译成英文</span>
         </n-popover>        
         <n-radio-group v-model:value="superior" name="radiogroup" mt-3 mb-3> 
           <n-space>
@@ -134,8 +134,7 @@ const options = [
   },
   {
     label: "DALL·E3",
-    value: "dall",
-    disabled: true
+    value: "dall"
   },
   {
     label: "Stable Diffusion XL 1.0",
@@ -147,7 +146,7 @@ const superior = ref("GPT4")
 const superiors = [
   {
     value: "GPT4",
-    label: "GPT4优化关键词"
+    label: "AI自动优化关键词"
   },
   {
     value: "Selfconf",

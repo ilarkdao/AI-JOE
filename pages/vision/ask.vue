@@ -1,45 +1,53 @@
 <template>
-  <div class="subContainer"> 
-    <div id="appcode"> 
+  <div px-5 pt-5> 
+    <div bg-white rounded mt-4.5 pb-6 px-4 lg:px-10 min-h-85vh shadow-sm> 
+      <p text-4.5 text-gray-600 text-center pt-2 h-10>图像交互</p>
+
+      <!-- 上传图片 -->
+      <n-upload mt-2 mb-4
+        :default-upload="false"
+        list-type="image-card"
+        multiple
+        @change="handleChangeX"
+      >
+        上传图像
+      </n-upload>
+
+      <div text-center v-if="loadingFlag"><img :src="loadingX" alt="ai joe loading"></div>
+
       <!-- 模型 -->
       <div flex items-center> 
-        <div w-25 flex items-center>
-          <p mr-2>预设模型 </p> 
+        <div flex items-center>
+          <p mr-2>图像模型 </p> 
           <n-popover trigger="hover" >
             <template #trigger>
               <div class="i-mdi-alpha-i-circle" hidden lg:flex/>
             </template>
-            <span>选择合适的语言模型有利于更为精准的结果</span>
+            <span>选择合适的图像模型有利于更为精准的结果</span>
           </n-popover>
         </div>
-        <Models ref="ModelRef"></Models> 
+        <VisionModels ref="vModelRef"></VisionModels> 
       </div> 
       <n-input
         v-model:value="prompt"
         type="textarea"
         rows=2
-        placeholder="请输入你的需求......"
+        placeholder="请输入你的想法......"
       />
-      <div text-center  pb-2 v-if="!clickFlag">
-        <n-button mt-2 mr-2 type="primary"  @click="submit('The following requirements are implemented in JavaScript:\n\n')" >
-          JS实现
-        </n-button>
-        <n-button mt-2 mr-2 type="primary" @click="submit('The following requirements are implemented in Python:\n\n')" >
-          Python实现
-        </n-button>
-        <n-button mt-2 mr-2 type="primary" @click="submit('The following requirements are implemented in Golang:\n\n')" >
-          Golang实现
-        </n-button>
-        <n-button mt-2 mr-2 type="primary" @click="submit('The following requirements are implemented in Solidity:\n\n')" >
-          Solidity实现
-        </n-button>
-        <n-button mt-2 mr-2 w-40  type="primary"> 
-          <n-input  v-model:value="languageValue" type="text" placeholder="输入语言" />
-          <span ml-4 @click="otherSubmit">实现</span>
+      
+      <div text-center mt-2 pb-2 v-if="!clickFlag">
+        <n-button block items-center type="primary"  @click="submit" >
+          提交
         </n-button>
       </div>
 
-      <div id="chat_container"></div>  
+      <div id="chat_container"></div>
+
+      <div text-right mt-1 pb-2 v-if="clearFlag">
+        <n-button quaternary @click="clear" >
+          清除
+        </n-button>
+      </div>
     </div>
   </div>
 </template>
@@ -49,11 +57,11 @@ import "@/assets/style.css";
 import user from "@/assets/img/user.svg"
 import bot from "@/assets/img/bot.png"
 import { createDiscreteApi } from "naive-ui"
-import loading from '/loading.gif'
+import loadingX from '/loading.gif'
 let { message } = createDiscreteApi(["message"])
 const token = useCookie('token')
 useHead({
-  title:"编程"
+  title:"图像交互"
 })
 const loadingStripe = (uniqueId) => {
     return (
@@ -78,26 +86,34 @@ const chatStripe = (isAi, value, uniqueId) => {
   )
 }
 
+let loadingFlag = ref(false)
+
 // 切换模型
-let ModelRef = ref(null)
-
+let vModelRef = ref(null)
 const clickFlag = ref(false)
+const clearFlag = ref(false)
 const prompt = ref('')
-const languageValue = ref('')
-if(process.client){
-  let lastname = localStorage.getItem("languageValue")
-  // console.log(566, "lastname", lastname)
-  if(lastname != null){
-    languageValue.value = lastname
-    // console.log(599, "lastname")
-  }
-}
 
+const imgX = ref(null)
 let round = 1
 let history = []
 let historyX = [] //上传API
 
-const submit = async(target) => {	
+//上传图片
+const handleChangeX = async (options) => {
+  if(options.fileList.length == 0) {
+    return
+  }
+  loadingFlag.value = true
+  clickFlag.value = true
+  // handleClick(options.fileList[0].file) 
+  imgX.value = await upImage(options.fileList[0].file)
+  loadingFlag.value = false
+  clickFlag.value = false
+  console.log(5566,"imgX", imgX.value)
+}
+
+const submit = async() => {	
   if(!token.value){
     message.error("您尚未登录， 呜呜~~", { duration: 5e3 })
     return
@@ -106,12 +122,16 @@ const submit = async(target) => {
     message.error("文本不能为空！", { duration: 5e3 })
     return
   }
+  if(imgX.value == null){
+    message.error("您尚未上传图片！", { duration: 5e3 })
+    return
+  }
 
-  let model = ModelRef.value.defaultModel
+  let model = vModelRef.value.visionModel
   //更新model 如果与前值不同，就重新赋值
-  let setModel = localStorage.getItem(llms)
+  let setModel = localStorage.getItem(vllms)
   if(model != setModel){
-    localStorage.setItem(llms, model)
+    localStorage.setItem(vllms, model)
     // console.log(899, "set model", model)
   }
 
@@ -162,10 +182,19 @@ const submit = async(target) => {
   // to focus scroll to the bottom
   chatContainer.scrollTop = chatContainer.scrollHeight
 
+  let viewContent = [
+    { type: "text", text: prompt.value},
+    {
+      type: "image_url",
+      image_url: {"url": imgX.value},
+    },
+  ]
+
   historyX = history.slice()
   history.push({role: "user", content: prompt.value})
-  historyX.push({role: "user", content: target+prompt.value})
-  // let query = [{role: "user", content: target+prompt.value}]
+  historyX.push({role: "user", content: viewContent})
+  console.log(5589, "history", history, "historyX", historyX)
+
   let dataObj = {
       method: 'POST',
       headers: {
@@ -175,12 +204,13 @@ const submit = async(target) => {
       body: JSON.stringify({
           model: model,
           query: historyX,
-          temperature: 0.2
+          imgUrl: imgX.value
       })
   }
   //to clear the textarea input 
   prompt.value = '' 
-  const response = await fetch(baseURL+'/streaming', dataObj)
+
+  const response = await fetch(baseURL+'/vision', dataObj)
   messageDiv.innerHTML = " "
   if (response.ok) {	
       let i = 0
@@ -188,8 +218,8 @@ const submit = async(target) => {
           return reader.read().then(function (result) {
             // 如果数据已经读取完毕，直接返回
             if (result.done) {
-              // console.log(889, "result done")
               clickFlag.value = false
+              clearFlag.value = true
               clearInterval(loadInterval)  
               loading.textContent = ''
               history.push({ 'role': 'assistant', 'content': messageDiv.innerHTML})
@@ -197,7 +227,6 @@ const submit = async(target) => {
             }
             // 取出本段数据（二进制格式）
             let chunk = result.value
-            // console.log(1267, chunk, typeof chunk)  //unit8array object
             let text = utf8ArrayToStr(chunk)
             if(i === 0){
               text = text.replace(/\\n/g,'')  //去除首段换行
@@ -223,22 +252,10 @@ const submit = async(target) => {
   }   
 }
 
-const otherSubmit = async () => {
-  if(languageValue.value == ''){
-    message.error("语言项不能为空！", { duration: 5e3 })
-    return
-  }
-
-  let lastname = localStorage.getItem("languageValue")
-  //设置或更新
-  if(lastname == null || languageValue.value != lastname){
-    localStorage.setItem('languageValue', languageValue.value)
-    // console.log(899, "set lastname")
-  }
-  // console.log(63, "otherSubmit", languageValue.value)
-  
-  //The following requirements are implemented in JavaScript
-  let target = 'The following requirements are implemented in '+languageValue.value+': \n\n'
-  await submit(target)
+const clear = () => {
+  //刷新页面
+  let router = useRouter()
+  router.go(0)
 }
+
 </script>

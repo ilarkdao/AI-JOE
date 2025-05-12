@@ -9,55 +9,35 @@
 <script setup>
 const options = [
   {
-    label: "OpenAI o1-preview",
-    value: "openai/o1-preview",
+    label: "DeepSeek R1 Distill Qwen 32B",
+    value: "deepseek/deepseek-r1-distill-qwen-32b",
   },
   {
     label: "OpenAI o1-mini",
-    value: "openai/o1-mini",
-  },
-  {
-    label: "GPT-4o-mini",
-    value: "openai/gpt-4o-mini",
+    value: "o1-mini",
   },
   {
     label: "GPT-4o",
-    value: "openai/gpt-4o",
+    value: "gpt-4o",
   },
   {
-    label: "GPT-4 Turbo",
-    value: "openai/gpt-4-turbo",
+    label: "GPT-4o mini",
+    value: "gpt-4o-mini",
   },
   {
     label: "GPT-3.5 Turbo",
-    value: "openai/gpt-3.5-turbo",
+    value: "gpt-3.5-turbo" 
   },
   {
-    label: "Google: Gemma 7B",
-    value: "google/gemma-7b-it:nitro"
+    label: "Google Gemini Flash 2.0",
+    value: "google/gemini-2.0-flash-001"
   },
   {
-    label: "Google: Gemini Pro",
-    value: "google/gemini-pro"
-  },
-  {
-    label: "Google: PaLM2 Chat",
-    value: "google/palm-2-chat-bison"
-  },
-  {
-    label: "Meta: CodeLlama 34B Instruct",
-    value: "meta-llama/codellama-34b-instruct",
-  },
-  {
-    label: "Yi 34B Chat",
-    value: "01-ai/yi-34b-chat",
-  },
-  {
-    label: "Perplexity PPLX 70B Online",
-    value: "perplexity/pplx-70b-online",
+    label: "01.AI Yi Large",
+    value: "01-ai/yi-large",
   }]
 
-const defaultModel = ref("openai/o1-preview")
+const defaultModel = ref("deepseek/deepseek-r1-distill-qwen-32b")
 if(process.client){
   // console.log("111, llms", llms)
   let setModel = localStorage.getItem(llms)

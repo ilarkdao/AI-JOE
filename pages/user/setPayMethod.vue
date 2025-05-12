@@ -9,16 +9,16 @@
          <n-select v-model:value="method" :options="options" />
       </n-space> 
    </div>
-   <div flex mb-4 h-6 items-center justify-between v-if="method == 'alipay' || method == 'wechatpay'">
-      <p>充值帐户名：</p>
+   <div flex mb-4 h-6 items-center justify-between v-if="method == 'wechatpay'">
+      <p>付款帐户名：</p>
       <div w-52vw lg:w-30vw>
         <n-input 
           v-model:value="account"
-          placeholder="请输入充值帐户名"
+          placeholder="请输入微信付款帐户名"
         />
       </div>
    </div>
-   <div flex mb-4 h-6 justify-center items-center  v-if="method == 'usdt' || method == 'lark'">
+   <div flex mb-4 h-6 justify-center items-center  v-if="method != 'wechatpay'">
       <div mt-6>
         <img
           width="70"
@@ -38,16 +38,15 @@
     </n-button>
    </div>
 
-   <div my-8 h-6  text-red-500 v-if="method == 'usdt' || method == 'lark'">
-    <p>特别注意： Polygon网络充值要先安装好MetaMask钱包，并有相应的token。 </p>
-    <p><a target="_blank" href="https://doc.ilark.io/polygonin.html">-> 参考文档</a></p>
-   </div>
-   <div my-8 h-6 text-red-500 v-else>
-      <p>特别注意：此处的帐户名是与充值的帐户名一致，比如用支付宝，则填入支付宝的帐户！
-        用微信支付，则填入微信的帐户！
+   
+   <div my-8 h-6 text-red-500 v-if="method == 'wechatpay'">
+      <p>特别注意：此处的帐户名是微信支付的账户！
       </p>
-      <p><a target="_blank" href="https://doc.ilark.io/polygonin.html">-> 参考文档</a></p>
    </div>
+   <!-- <div my-8 h-6  text-red-500 v-else>
+    <p>特别注意： Base / Polygon网络充值要先安装好MetaMask钱包，切换到相应的主网，并有相应的token。 </p>
+    <p><a target="_blank" href="https://doc.ilark.io/basein.html">-> 参考文档</a></p>
+   </div> -->
 
 </div>
 </template>
@@ -63,36 +62,95 @@ definePageMeta({
 })
 let clickFlag = ref(false)
 //充值方式
-const method = ref('usdt')
+const method = ref('wechatpay')
 const account = ref('')
 const options = [
+  // {
+  //   label: "AIJoe(Base)",
+  //   value: "aijoe",
+  // },
+  // {
+  //   label: "Slime(Base)",
+  //   value: "Slime",
+  // },
+  // {
+  //   label: "USDT(Base)",
+  //   value: "usdtbase",
+  // },
+  // {
+  //   label: "USDT(Polygon)",
+  //   value: "usdt",
+  // },
+  // {
+  //   label: "LARK(Polygon)",
+  //   value: "lark",
+  // },
   {
-    label: "USDT(Polygon)",
-    value: "usdt",
-  },
-  {
-    label: "LARK(Polygon)",
-    value: "lark",
+    label: "微信支付",
+    value: "wechatpay"
   },
   {
     label: "支付宝",
     value: "alipay",
-  },
-  {
-    label: "微信支付",
-    value: "wechatpay"
+    disabled: true
   }]
 
 const submit = async () => {
   clickFlag.value = true
-  if(method.value == 'usdt' || method.value == 'lark'){
-    let signer = await metaMaskConn()
-    // console.log(263, signer)
-    if(signer == null){
+  
+  let signer
+  switch (method.value) {
+    /*
+    case "aijoe":
+      signer = await metaMaskConnBase()
+      // console.log(2693, signer)
+      if(signer == null){
+        message.error("没有联上MetaMask钱包！", { duration: 5e3 })
+        return
+      }
+      account.value = "Base帐户"
+      break;
+    case "Slime":
+      signer = await metaMaskConnBase()
+      if(signer == null){
+        message.error("没有联上MetaMask钱包！", { duration: 5e3 })
+        return
+      }
+      account.value = "Base帐户"
+      break;
+    case "usdtbase":
+      signer = await metaMaskConnBase()
+      if(signer == null){
+        message.error("没有联上MetaMask钱包！", { duration: 5e3 })
+        return
+      }
+      account.value = "Base帐户"
+      break;
+    case "usdt":
+      signer = await metaMaskConnPol()
+      if(signer == null){
+        message.error("没有联上MetaMask钱包！", { duration: 5e3 })
+        return
+      }
+      account.value = "Polygon帐户"
+      break;
+    case "lark":
+      signer = await metaMaskConnPol()
+      if(signer == null){
+        message.error("没有联上MetaMask钱包！", { duration: 5e3 })
+        return
+      }
+      account.value = "Polygon帐户"
+      break;
+    */
+    case "wechatpay":
+      break;
+    default:
+      console.log('请选择正确的充值方式！')
+      message.error("请选择正确的充值方式！", { duration: 5e3 })
       return
-    }
-    account.value = "Polygon帐户"
   }
+  console.log(5389, "account info:", method.value, account.value)
 
   if(account.value == ''){
     message.error("帐户名不能为空！", { duration: 5e3 })
@@ -103,21 +161,21 @@ const submit = async () => {
     account: account.value
   }
   let { data,  error } = await postHttp('/pay/createmethod', body, token.value)
-  // console.log(668, data.value)
   if(error.value) {
-    // console.log(444, error.value)
     message.error("失败！\n"+error.value, { duration: 5e3 })
     return
   }
-  message.success("添加资料成功！", { duration: 5e3 })
+  message.success("充值方式添加成功！", { duration: 5e3 })
   //将充值方式存入cookie
   const payMethod = useCookie('payMethod', {maxAge: 60 * 60})  //60分钟
   payMethod.value = data.value.paymethod
-  if(method.value == 'usdt' || method.value == 'lark'){
-    navigateTo('/user/polygonin')
-  } else {
+
+  if(method.value == 'wechatpay'){
     navigateTo('/user/createorder')
-  }
-  
+  } 
+  // else {
+  //   navigateTo('/user/cryptonet')
+  // }
 }
+
 </script>

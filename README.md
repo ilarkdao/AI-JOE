@@ -6,6 +6,7 @@
 ## 简介
 AI·Joe，人工智能助手，辅助工作流。它是基于多个语言模型和开发框架， 比如：Openai API、Google Gemini、Google PaLM2 Chat、Meta Llama、Yi 34B Chat、 Midjourney、Stable Diffusion、LangChain等。致力于打造优秀的人工智能助手和自动化的工作流程。 它开箱即用，对具体的应用场景和参数都做了调优。 在不断升级的过程中，将迎来更加智能化的未来！
 
+
 ## 项目本地运行
 ```
 yarn install
@@ -13,11 +14,22 @@ yarn dev
 http://localhost:3000
 ```
 
+
+## V9更新
+v9.0  - AI·Joe此次增加视觉图像功能，可以上传图片后与图片交互，图片转文字，图片转prompt，以及网页截图转前端代码！
+      - 删除了加密充值功能模块。
+      - 删除了社区Meme版块。
+
+## V8更新
+v8.0 AI·Joe此次增加了社区Meme版块。Meme是新的注意力经济，它将小伙伴们紧密相连，同时也向外部扩散。
+v8.1 AI·Joe此次新增支持社区$Slime 和 $AIJoe充值。
+
 ## V7更新
 V7.0 AI·Joe此次增加了大语言模型GPT-4o，速度更快，价格更便宜。增加了角色：机器学习工程师和自媒体达人，社交媒体运营的人有福啰！
 V7.1 AI·Joe此次增加了新模型 GPT-4o mini，速度更快，价格更便宜，量大管饱！
 V7.2 AI·Joe此次增加了新模型 o1-preview和o1-mini，适用于需要广泛常识的复杂推理任务，能力媲美博士。
-
+v7.3 AI·Joe此次更新DeepSeek R1 Distill Qwen 32B
+ 
 ## V6更新
 AI·Joe此次新增了Midjourney图像模型, 新增了设计版块：风格头像，标志设计......
 

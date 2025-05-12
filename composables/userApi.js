@@ -1,9 +1,12 @@
 export const baseURL = "https://api.ilark.io"
 // export const baseURL = "http://43.132.209.216:6200"
-// export const baseURL = "http://localhost:6200" 
+// export const baseURL = "http://localhost:6200"
 
 //设置语言模型
-export const llms = "joe-llms5"
+export const llms = "joe-llms7"
+
+//设置视觉模型
+export const vllms = "joe-vllms1"
 
 //对话中最大的中文和英文长度
 export const max_zh_length = 1600

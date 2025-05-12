@@ -83,14 +83,14 @@ const menus = [{
     name:"角色",
     path:"/role"
 },{
-    name:"编程",
-    path:"/code"
-},{
     name:"图像",
     path:"/image"
 },{
     name:"设计",
     path:"/design/portrait"
+},{
+    name:"读图",
+    path:"/vision/ask"
 }]
 
 const navTo = path => navigateTo(path)

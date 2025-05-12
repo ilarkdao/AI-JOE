@@ -104,11 +104,18 @@ if(process.client){
 }
 
 const payTo = () => {
+  if(payMethod.value.pay_method == 'wechatpay'){
+    navigateTo('/user/createorder')
+  } else {
+    navigateTo('/user/cryptonet')
+  }
+  /*
   if(payMethod.value.pay_method == 'usdt' || payMethod.value.pay_method == 'lark'){
     navigateTo('/user/polygonin')
   } else {
     navigateTo('/user/createorder')
   }
+  */
 }
 
 const confirmPaid = () => {

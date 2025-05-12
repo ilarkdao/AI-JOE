@@ -10,14 +10,18 @@
             <td>积分价格</td>
             <td>￥1 = 400积分</td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td> </td>
-            <td>1 USDT = 2860积分</td>
+            <td>1 AIJoe(Base) = 实时价格</td>
           </tr>
           <tr>
             <td> </td>
-            <td>1 LARK = 1积分</td>
-          </tr>
+            <td>1 Slime(Base) = 实时价格</td>
+          </tr> 
+          <tr>
+            <td> </td>
+            <td>1 USDT(Base/Polygon) = 2860积分</td>
+          </tr> -->
         </tbody>
       </n-table>
    </div>
@@ -31,21 +35,14 @@
         </thead>
         <tbody>
           <tr>
-            <td>OpenAI o1-preview</td>
-            <td>0.35积分/token</td>
+            <td>DeepSeek R1 Distill Qwen 32B</td>
+            <td>0.003积分/token</td>
           </tr>
         </tbody>
         <tbody>
           <tr>
             <td>OpenAI o1-mini</td>
             <td>0.07积分/token</td>
-          </tr>
-        </tbody>
-
-        <tbody>
-          <tr>
-            <td>GPT-4o-mini</td>
-            <td>0.005积分/token</td>
           </tr>
         </tbody>
         <tbody>
@@ -56,8 +53,8 @@
         </tbody>
         <tbody>
           <tr>
-            <td>GPT-4 Turbo</td>
-            <td>0.12积分/token</td>
+            <td>GPT-4o-mini</td>
+            <td>0.005积分/token</td>
           </tr>
         </tbody>
         <tbody>
@@ -68,44 +65,14 @@
         </tbody>
         <tbody>
           <tr>
-            <td>Google: Gemma 7B</td>
-            <td>0.005积分/token</td>
+            <td>Google Gemini Flash 2.0</td>
+            <td>0.003积分/token</td>
           </tr>
         </tbody>
         <tbody>
           <tr>
-            <td>Google: Gemini Pro</td>
-            <td>0.005积分/token</td>
-          </tr>
-        </tbody>
-        <tbody>
-          <tr>
-            <td>Google: PaLM2</td>
-            <td>0.0025积分/token</td>
-          </tr>
-        </tbody>
-        <tbody>
-          <tr>
-            <td>Meta: CodeLlama 34B Instruct</td>
-            <td>0.0025积分/token</td>
-          </tr>
-        </tbody>
-        <tbody>
-          <tr>
-            <td>Yi 34B Chat</td>
-            <td>0.005积分/token</td>
-          </tr>
-        </tbody>
-        <tbody>
-          <tr>
-            <td>Perplexity PPLX 70B Online</td>
-            <td>0.01积分/token</td>
-          </tr>
-        </tbody>
-        <tbody>
-          <tr>
-            <td>Embedding Ada v2</td>
-            <td>0.0005积分/token</td>
+            <td>01.AI Yi Large</td>
+            <td>0.02积分/token</td>
           </tr>
         </tbody>
       </n-table>
