@@ -1,5 +1,6 @@
 <template>
 <div px-2 lg:px-20 pt-5>
+<<<<<<< HEAD
    <!-- 支付宝 / 微信充值记录 -->
    <div v-if="history">
     <div text-center>
@@ -20,20 +21,35 @@
 
    <div text-center v-if="loadingFlag"><img :src="loading" alt="ai joe loading"></div>
    <div v-if="!history && !loadingFlag">暂没有充值记录</div>
+=======
+   <div text-center>
+    <h2>用户充值记录</h2>   
+   </div>
+   <div v-for="(item,index) in history" :key="index" border-dashed border-1 text-3.2 mb-2>
+      <div>id： {{ item.user_id }}</div>  
+      <div>充值方式： {{ item.pay_method }}</div>
+      <div>充值帐户： {{ item.pay_account }}</div>
+      <div>充值金额：￥{{ item.amount }}</div>
+      <div v-if="item.finished">完成时间： {{ TimesToLocal(item.finished) }}</div>
+      <div v-else>
+        <div>创建时间： {{ TimesToLocal(item.created) }}</div>
+        完成状态：尚在进行中...
+      </div>
+    </div>
+>>>>>>> parent of c04a9ed... v7.3 update,add new llm
 </div>
 </template>
 
 <script setup>
 import { createDiscreteApi } from "naive-ui"
-import loading from '/loading.gif'
 let { message } = createDiscreteApi(["message"])
 const token = useCookie('token')
-// let token = useCookie('token', {maxAge: 60 * 60 * 24 * 30})
 definePageMeta({
   middleware:["auth"]
 })
 
 const history = ref(null)
+<<<<<<< HEAD
 // const polygonhistory = ref(null)
 let loadingFlag = ref(true)
 //获取Polygon订单
@@ -62,28 +78,24 @@ const getPolygonHistory = async () => {
 */
 
 //获取支付宝订单
+=======
+//获取订单
+>>>>>>> parent of c04a9ed... v7.3 update,add new llm
 const getHistory = async () => {
-  let { data, pending, error } = await getHttp('/pay/userorders', token.value)
+  let { data,  error } = await getHttp('/pay/userorders', token.value)
   if(error.value) {
     // console.log(444, errorX.value)
     message.error("查找失败！\n"+error.value.data, { duration: 5e3 })
     return
   }
-  //处理pending，否则刷新时会报错！
-  if(pending.value){
-    await sleep()
-    if(pending.value){
-      await sleep()
-    }
-  }
-  if(data.value.payhistory.length == 0){ 
-    loadingFlag.value = false
-    return
-  }
-  loadingFlag.value = false
   history.value = data.value.payhistory
 }
+<<<<<<< HEAD
 if(process.client){
   getHistory()
 }
+=======
+getHistory()
+
+>>>>>>> parent of c04a9ed... v7.3 update,add new llm
 </script>

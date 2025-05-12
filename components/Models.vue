@@ -9,6 +9,7 @@
 <script setup>
 const options = [
   {
+<<<<<<< HEAD
     label: "DeepSeek R1 Distill Qwen 32B",
     value: "deepseek/deepseek-r1-distill-qwen-32b",
   },
@@ -38,9 +39,28 @@ const options = [
   }]
 
 const defaultModel = ref("deepseek/deepseek-r1-distill-qwen-32b")
+=======
+    label: "GPT-3.5 Turbo",
+    value: "gpt-3.5-turbo",
+  },
+  {
+    label: "GPT-4",
+    value: "gpt-4",
+  },
+  {
+    label: "Claude v2",
+    value: "anthropic/claude-2",
+    disabled: true
+  },
+  {
+    label: "Code Llama Instruct (仅英文)",
+    value: "meta-llama/codellama-34b-instruct",
+  }]
+
+const defaultModel = ref("gpt-3.5-turbo")
+>>>>>>> parent of c04a9ed... v7.3 update,add new llm
 if(process.client){
-  // console.log("111, llms", llms)
-  let setModel = localStorage.getItem(llms)
+  let setModel = localStorage.getItem("setModel")
   if(setModel != null){
     defaultModel.value = setModel
   }

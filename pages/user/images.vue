@@ -14,7 +14,7 @@
         <div>时间： {{ TimesToLocal(item.created) }}</div>
     </div>
   </div>
-  <div v-if="!images && !loadingFlag">暂时还没有图片</div>
+  <div v-else>暂时还没有图片</div>
   <div text-center v-if="loadingFlag"><img :src="loading" alt="ai joe loading"></div>
   <div text-center><n-button @click="more" v-if="moreFlag" strong secondary>更多</n-button></div>
 </div>
@@ -38,24 +38,15 @@ let loadingFlag = ref(true)
 
 //获取图片
 const getImages = async () => { 
-  let { data, pending, error } = await getHttp('/imageapi/images/0', token.value)
+  let { data,  error } = await getHttp('/imageapi/images/0', token.value)
   // console.log(22, data.value, 664, error.value)
   if(error.value) {
     // console.log(444, error.value)
     message.error("失败！\n"+error.value.data, { duration: 5e3 })
     return
   }
-  //处理pending，否则刷新时会报错！
-  if(pending.value){
-    await sleep()
-    if(pending.value){
-      await sleep()
-    }
-  }
-
   // console.log(666, "history", data.value)
   if(data.value.images.length == 0){  //没有图片
-    loadingFlag.value = false
     return
   }
 

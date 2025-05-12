@@ -9,6 +9,7 @@
           <n-select v-model:value="imgmodel" :options="options" />
         </n-space> 
       </div>
+<<<<<<< HEAD
 
         <!-- 是否优化关键词 -->
         <div flex items-center>
@@ -26,9 +27,11 @@
           </n-space>
         </n-radio-group> 
         </div>     
+=======
+>>>>>>> parent of c04a9ed... v7.3 update,add new llm
       
       <!-- 生成数量 -->
-      <div flex mb-4 h-6 items-center justify-between v-if="imgmodel == 'stable'"> 
+      <div flex mb-4 h-6 items-center justify-between> 
         <p>生成图像数量：</p>
         <n-space w-52vw lg:w-35vw>
           <n-radio
@@ -59,41 +62,15 @@
       </div>
 
       <div v-if="!clickFlag">
-        <!-- <div text-rose mb-2 v-if="imgmodel == 'dall'">DALL·E3模型目前只能一次生成一张！</div> -->
-        <div text-rose mb-2 v-if="imgmodel != 'dall'&&superior == 'Selfconf'">请使用英文关键词！</div>
-        
+        <div text-rose mb-2 v-if="imgmodel == 'stable'">Stable Diffusion模型请尽量使用英文关键词！</div>
         <n-input
           v-model:value="prompt"
           type="textarea"
-          placeholder="输入关键词句以生成图像......"
+          placeholder="input image prompt......"
         />
-
-        <!-- 上传图片 -->
-        <div v-if="imgmodel == 'midjourney'&&superior == 'Selfconf'">
-        <n-space text-3>
-          <n-switch size="small" v-model:value="switchActive" /> 参考图
-        </n-space>
-        <n-upload mt-2 v-if="switchActive"
-          :default-upload="false"
-          list-type="image-card"
-          multiple
-          @change="handleChangeX"
-        >
-          上传参考图
-        </n-upload>
-        </div>
-
-        <div mt-2>
-        <n-button block items-center type="primary" @click="onSubmit">
+        <n-button block mt-4 items-center type="primary" @click="onSubmit">
           生成图像
-        </n-button></div>
-                 
-        <div mt-4 mb-2 v-if="imgmodel == 'midjourney'">Midjourney生成图片的时间约1分钟左右。</div>
-        <div mt-4 mb-2 v-if="imgmodel == 'midjourney'">如果超时，可直接到 用户中心 -> 
-          <nuxt-link to="/user/images"><n-button quaternary type="primary" size="small">图片库</n-button> </nuxt-link>中查看</div>
-        <div mt-4 mb-2 v-if="imgmodel == 'midjourney'">
-          <p><a target="_blank" href="https://doc.ilark.io/Midjourney_prompt.html">-> 关键词技巧参考</a></p> 
-        </div>
+        </n-button>
       </div>
 
       <div v-else>
@@ -107,9 +84,7 @@
             :src="item" rounded-2 alt="ai joe"
           /> 
         </div><br>
-        <n-button type="tertiary" v-if="img_url" @click="more" text-3.6>
-          再来一次
-        </n-button>
+        <n-button type="tertiary" v-if="img_url" @click="more" text-3.6>再来一次</n-button>
       </div>
 
     </div>
@@ -126,9 +101,10 @@ useHead({
   title:"图像"
 })
 // 图片模型
-const imgmodel = ref("midjourney")
+const imgmodel = ref("stable")
 const options = [
   {
+<<<<<<< HEAD
     label: "Midjourney V6",
     value: "midjourney",
   },
@@ -147,12 +123,16 @@ const superiors = [
   {
     value: "GPT4",
     label: "AI自动优化关键词"
+=======
+    label: "Stable Diffusion XL 1.0",
+    value: "stable"
+>>>>>>> parent of c04a9ed... v7.3 update,add new llm
   },
   {
-    value: "Selfconf",
-    label: "自定义关键词"
-  }]
-
+    label: "Dall E2",
+    value: "dall",
+  }
+  ]
 // 图片数量
 const checkedNum = ref('1')
 const handleChange = (e) => {
@@ -163,58 +143,6 @@ const handleChange = (e) => {
 const clickFlag = ref(false)
 const prompt = ref('')
 const img_url = ref(null)
-
-//上传mj参考图片
-const switchActive = ref(false)
-const handleChangeX = (options) => {
-  if(options.fileList.length == 0) {
-    return
-  }
-  handleClick(options.fileList[0].file) 
-}
-const handleClick = async (file) =>{
-  let ref_img = await upImage(file)
-  // prompt.value += ref_img+' '
-  prompt.value = ref_img+' '+prompt.value
-}
-
-const gpt4Superior = async () => {
-  if(!token.value){
-    message.error("您尚未登录， 呜呜~~", { duration: 5e3 })
-    return
-  }
-  if(prompt.value == ''){
-    message.error("关键词不能为空！", { duration: 5e3 })
-    return
-  }
-  let role = "我想让你担任Midjourney人工智能程序的提示生成器，它是一个绘画AI。你的任务是提供详细而有创意的描述，激发人工智能生成独特而有趣的图像。请记住，它只能理解具象的描述而非抽象的概念，同时根据你对绘画AI的理解，比如它可能的训练模型、自然语言处理方式等方面，进行翻译优化。由于我的描述可能会很散乱，不连贯，你需要综合考虑这些问题，然后对翻译后的英文内容再次优化或重组，从而使绘画AI更能清楚我在说什么。请严格按照此条规则进行翻译，也只输出翻译后的英文内容。以下是第一条提示："
-  let dataObj = {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token.value
-      },
-      body: JSON.stringify({
-          model: "gpt-4-1106-preview",
-          query: [{role: "user", content: role+prompt.value}],
-          temperature: 0.2
-      })
-  }
-
-  const response = await fetch(baseURL+'/gpt4', dataObj) 
-  if (response.ok) {
-      let content = await response.text() 
-      // console.log(236, "content", content)
-      let str = content.replace("\"","").replace("\"","") //去除首尾的双引号
-      // console.log(566, "str", str)
-      return str
-  } else {
-      const err = await response.text()
-      message.error("错误！\n"+err, { duration: 5e3 })
-      return ''
-  }
-}
-
 const onSubmit = async () => {
   if(!token.value){
     message.error("您尚未登录， 呜呜~~", { duration: 5e3 })
@@ -225,37 +153,21 @@ const onSubmit = async () => {
     return
   }
   clickFlag.value = true
-  if(superior.value == "GPT4"){
-    prompt.value = await gpt4Superior()
+  let body = {
+    imgmodel: imgmodel.value,
+    num: checkedNum.value,
+    prompt: prompt.value
   }
+  let { data,  error } = await postHttp("/imageapi", body, token.value)
+  // console.log(211, data.value)
 
-  // console.log(999, "prompt.value", prompt.value)
-  // return
-
-  let dataObj = {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token.value
-      },
-      body: JSON.stringify({
-          imgmodel: imgmodel.value,
-          num: checkedNum.value,
-          prompt: prompt.value
-      })
+  if(error.value) {
+    // console.log(444, error)
+    message.error("失败！\n"+error.value.data, { duration: 5e3 })
+    clickFlag.value = false
+    return
   }
-
-  const response = await fetch(baseURL+'/imageapi', dataObj)
-  // console.log(223, response)
-  if(response.ok){
-    let res = await response.json()
-    // console.log(566, res, 886, res.imgurl)
-    img_url.value = res.imgurl
-  } else {
-      const err = await response.text()
-      clickFlag.value = false
-      message.error("错误！\n"+err, { duration: 5e3 })
-  }
+  img_url.value = data.value.imgurl
 }
 const more = () => {
   clickFlag.value = false
