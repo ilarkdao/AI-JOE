@@ -85,15 +85,12 @@ const menus = [{
 },{
     name:"图像",
     path:"/image"
-<<<<<<< HEAD
 },{
     name:"设计",
     path:"/design/portrait"
 },{
     name:"读图",
     path:"/vision/ask"
-=======
->>>>>>> parent of c04a9ed... v7.3 update,add new llm
 }]
 
 const navTo = path => navigateTo(path)

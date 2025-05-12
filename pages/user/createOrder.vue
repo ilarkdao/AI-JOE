@@ -43,7 +43,7 @@
    <div text-3>
       <p>注：￥1 = 400 积分</p> 
       <p>积分到帐会略有延迟</p>
-      <p>如积分超24小时还未到帐，则请反馈</p>
+      <p>如积分超24小时还未到帐，则请反馈 larkio2021@gmail.com</p>
    </div>
 
     <!-- <n-button block mt-4 items-center type="primary" @click="getOrder">

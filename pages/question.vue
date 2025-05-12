@@ -1,14 +1,15 @@
 <template>
 <div class="subContainer" mt-6>
   <strong>简介</strong>
-  <p>AI·Joe，随手可用的智能助手，如影似人。它是基于多个语言模型和开发框架，
-  比如：Openai API、Claude v2、Meta Llama、Stable Diffusion、LangChain等。致力于打造优秀的人工智能助手和自动化的工作流程。
+  <p>AI·Joe，人工智能助手，辅助工作流。它是基于多个语言模型和开发框架，
+  比如：Openai API、Google Gemini、Google PaLM2 Chat、Meta Llama、Yi 34B Chat、
+  Midjourney、Stable Diffusion、LangChain等。致力于打造优秀的人工智能助手和自动化的工作流程。
   它开箱即用，对具体的应用场景和参数都做了调优。
   在不断升级的过程中，将迎来更加智能化的未来！
   </p> 
+   <p><a target="_blank" href="https://doc.ilark.io" text-orange-900>-> 查看文档 </a></p> 
 
  <strong>大语言模型</strong>
-<<<<<<< HEAD
   <p>1. DeepSeek R1 Distill Qwen 32B</p>
  <p>DeepSeek R1 Distill Qwen 32B 是基于 Qwen 2.5 32B 的精馏大型语言模型，
   使用了 DeepSeek R1 的输出结果。在各种基准测试中，它的表现都优于 OpenAI 的 o1-mini，
@@ -44,23 +45,10 @@ o1 模型针对数学、科学、编程和其他 STEM 相关任务进行了优�
  <p>  Yi Large 模型由 01.AI 设计，考虑到了以下用例：知识搜索、数据分类、类人聊天机器人和客户服务。
 它的突出特点是精通多种语言，尤其是西班牙语、中文、日语、德语和法语。</p>
 
-=======
- <p>1. GPT-3.5 Turbo</p>
- <p>GPT-3.5-Turbo是由Openai推出的一种自然语言处理（NLP）模型。它表现非常出色，可以生成高质量的文本，其生成的文本的质量接近于人类写作。同时，在处理问答任务中，GPT-3.5-Turbo的语言理解能力也非常出色，可以理解和回答各种类型的问题。</p>
-
- <p>2. GPT-4</p>
- <p>GPT-4被认为是已知最强的语言模型，其智力和推理能力与优秀的本科本相当。但是另一方面，它的费用很贵，非常贵，费用是GPT 3.5的30倍。</p>
-
- <p>3. Claude v2</p>
- <p>Anthropic 公司开发，功能和GPT类似，被认为是GPT的强力竞争者。</p>
-
- <p>4. Code Llama Instruct</p>
- <p>Meta AI 发布的 Code Llama ，这是一个可以使用文本提示生成代码的大型语言模型 (LLM)。 Code Llama 是针对代码任务的公开LLM的最先进技术，有可能使当前开发人员的工作流程更快、更高效，并降低学习编码人员的进入门槛。 但是目前对中文的支持不太好，容易出现乱码。 </p>
->>>>>>> parent of c04a9ed... v7.3 update,add new llm
 
  <strong>积分制度</strong>
  <p> AI·Joe的消耗都用积分进行计算，采用预付费机制，用多少花多少。每个新用户都会赠送800积分的体验分，用完即需充值。具体参看
-   <nuxt-link to="/user/price"  text-gray-700>
+   <nuxt-link to="/user/price"  text-orange-900>
         价格表
    </nuxt-link>
  </p>
@@ -76,6 +64,7 @@ o1 模型针对数学、科学、编程和其他 STEM 相关任务进行了优�
  
  <strong>联系</strong>
  <p>官网:  <a target="_blank" href="https://ilark.io">https://ilark.io</a></p> 
+ <p>文档:  <a target="_blank" href="https://doc.ilark.io">https://doc.ilark.io</a></p> 
  <p>Github: <a target="_blank" href="https://github.com/ilarkdao">https://github.com/ilarkdao</a></p>  
  <p>Discord:  <a target="_blank" href="https://discord.gg/p9KTdmVrfb">https://discord.gg/p9KTdmVrfb</a></p> 
  <p>Medium:  <a target="_blank" href="https://medium.com/@ilark_dao">https://medium.com/@ilark_dao</a></p>

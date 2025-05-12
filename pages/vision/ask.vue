@@ -129,15 +129,9 @@ const submit = async() => {
 
   let model = vModelRef.value.visionModel
   //更新model 如果与前值不同，就重新赋值
-<<<<<<< HEAD:pages/vision/ask.vue
   let setModel = localStorage.getItem(vllms)
   if(model != setModel){
     localStorage.setItem(vllms, model)
-=======
-  let setModel = localStorage.getItem("setModel")
-  if(model != setModel){
-    localStorage.setItem('setModel', model)
->>>>>>> parent of c04a9ed... v7.3 update,add new llm:pages/code.vue
     // console.log(899, "set model", model)
   }
 
@@ -239,6 +233,7 @@ const submit = async() => {
             } else{
               text = text.replace(/\\n/g,'<br/>')
             }
+            text = text.replace(/\*/g,'')  //去除 *
             // 将本段数据追加到网页之中
             messageDiv.innerHTML += text
             chatContainer.scrollTop = chatContainer.scrollHeight

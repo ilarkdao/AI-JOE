@@ -22,7 +22,7 @@
         <n-input v-model:value="form.captureData" placeholder="验证码" />
     </n-form-item>
     
-    <div>
+    <div mt-1>
         <n-button block type="primary" @click="onSubmit" :loading="clickFlag">
             注 册
         </n-button>
