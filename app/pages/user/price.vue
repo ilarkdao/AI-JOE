@@ -17,11 +17,11 @@
           <tr>
             <td> </td>
             <td>1 Slime(Base) = 实时价格</td>
-          </tr> 
+          </tr>  -->
           <tr>
             <td> </td>
-            <td>1 USDT(Base/Polygon) = 2860积分</td>
-          </tr> -->
+            <td>1 USDT = 2860积分</td>
+          </tr>
         </tbody>
       </n-table>
    </div>

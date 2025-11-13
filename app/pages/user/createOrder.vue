@@ -63,7 +63,7 @@ definePageMeta({
 
 const payMethod = useCookie('payMethod') 
 if(!payMethod.value){
-  console.log(233, payMethod.value)
+  // console.log(233, payMethod.value)
   let { data,  error } = await getHttp('/pay', token.value)
   if(error.value) {
     console.log(444, error.value)
@@ -72,13 +72,13 @@ if(!payMethod.value){
   //将充值方式存入cookie
   
   payMethod.value = data.value.paymethod
-  console.log(666, payMethod.value)
+  // console.log(666, payMethod.value)
 }
 
 //充值金额
 const checkedNum = ref('50')
 const handleChange = (e) => {
-  console.log(e.target.value)
+  // console.log(e.target.value)
   checkedNum.value = e.target.value
 }
 

@@ -21,11 +21,29 @@
             </n-button>
         </div>
     </n-form>
+
+     <n-divider>
+       其它登录
+    </n-divider>
+    <div flex mb-8 h-6 justify-center items-center  v-if="method != 'wechatpay'">
+      <div mt-6>
+        <img
+          width="70"
+          height="50" 
+          :src="metamaskLog" alt="ai joe" 
+        />
+      </div>
+      <div>
+        <n-button mt-4 items-center type="primary" @click="metasubmit" :disabled='clickFlag'>
+          MetaMask直接登录
+        </n-button>
+      </div>
+   </div>
 </template>
 
 <script setup>
-import {NForm, NFormItem, NInput, NButton, createDiscreteApi } from "naive-ui"
-
+import {NForm, NFormItem, NInput, NButton, NDivider, createDiscreteApi } from "naive-ui"
+import metamaskLog from '/metamask.svg'
 let { message } = createDiscreteApi(["message"])
 definePageMeta({
     layout:"logintem"
@@ -65,4 +83,6 @@ const onSubmit = async ()=>{
     await loginApi('/userapi/login', option)
     clickFlag.value = false
 }
+
+const metasubmit = () => navigateTo('/metalogin')
 </script>

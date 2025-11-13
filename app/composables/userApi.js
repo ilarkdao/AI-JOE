@@ -1,5 +1,4 @@
 export const baseURL = "https://api.ilark.io"
-// export const baseURL = "http://43.132.209.216:6200"
 // export const baseURL = "http://localhost:6200"
 
 //设置语言模型

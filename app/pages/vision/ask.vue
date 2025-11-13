@@ -98,7 +98,7 @@ const imgX = ref(null)
 let round = 1
 let history = []
 let historyX = [] //上传API
-
+ 
 //上传图片
 const handleChangeX = async (options) => {
   if(options.fileList.length == 0) {
@@ -110,7 +110,7 @@ const handleChangeX = async (options) => {
   imgX.value = await upImage(options.fileList[0].file)
   loadingFlag.value = false
   clickFlag.value = false
-  console.log(5566,"imgX", imgX.value)
+  // console.log(5566,"imgX", imgX.value)
 }
 
 const submit = async() => {	

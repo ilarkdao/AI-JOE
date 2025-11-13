@@ -8,6 +8,8 @@
 </template>
 <style>
 .body {
-    @apply  bg-sky-50 flex flex-col min-h-screen;
+    color:#787878;
+    @apply  bg-gray-50 flex flex-col min-h-screen;
+    /* @apply  bg-sky-50 flex flex-col min-h-screen; */
 }
 </style>

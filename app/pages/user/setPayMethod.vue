@@ -37,16 +37,16 @@
       确认提交
     </n-button>
    </div>
-
+ 
    
    <div my-8 h-6 text-red-500 v-if="method == 'wechatpay'">
       <p>特别注意：此处的帐户名是微信支付的账户！
       </p>
    </div>
-   <!-- <div my-8 h-6  text-red-500 v-else>
+   <div my-8 h-6  text-red-500 v-else>
     <p>特别注意： Base / Polygon网络充值要先安装好MetaMask钱包，切换到相应的主网，并有相应的token。 </p>
     <p><a target="_blank" href="https://doc.ilark.io/basein.html">-> 参考文档</a></p>
-   </div> -->
+   </div>
 
 </div>
 </template>
@@ -55,44 +55,27 @@
 import metamaskLog from '/metamask.svg'
 import { NSpace, NSelect, NInput, NButton, createDiscreteApi } from "naive-ui"
 let { message } = createDiscreteApi(["message"])
-// const token = useCookie('token')
-const token = useCookie('token', {maxAge: 60 * 60 * 24 * 30})
+const token = useCookie('token')
+// const token = useCookie('token', {maxAge: 60 * 60 * 24 * 30})
 definePageMeta({
   middleware:["auth"]
 })
 let clickFlag = ref(false)
 //充值方式
-const method = ref('wechatpay')
+const method = ref('usdtbase')
 const account = ref('')
 const options = [
-  // {
-  //   label: "AIJoe(Base)",
-  //   value: "aijoe",
-  // },
-  // {
-  //   label: "Slime(Base)",
-  //   value: "Slime",
-  // },
-  // {
-  //   label: "USDT(Base)",
-  //   value: "usdtbase",
-  // },
-  // {
-  //   label: "USDT(Polygon)",
-  //   value: "usdt",
-  // },
-  // {
-  //   label: "LARK(Polygon)",
-  //   value: "lark",
-  // },
+  {
+    label: "USDT(Base)",
+    value: "usdtbase",
+  },
+  {
+    label: "USDT(Polygon)",
+    value: "usdt",
+  },
   {
     label: "微信支付",
     value: "wechatpay"
-  },
-  {
-    label: "支付宝",
-    value: "alipay",
-    disabled: true
   }]
 
 const submit = async () => {
@@ -100,28 +83,10 @@ const submit = async () => {
   
   let signer
   switch (method.value) {
-    /*
-    case "aijoe":
-      signer = await metaMaskConnBase()
-      // console.log(2693, signer)
-      if(signer == null){
-        message.error("没有联上MetaMask钱包！", { duration: 5e3 })
-        return
-      }
-      account.value = "Base帐户"
-      break;
-    case "Slime":
-      signer = await metaMaskConnBase()
-      if(signer == null){
-        message.error("没有联上MetaMask钱包！", { duration: 5e3 })
-        return
-      }
-      account.value = "Base帐户"
-      break;
     case "usdtbase":
       signer = await metaMaskConnBase()
       if(signer == null){
-        message.error("没有联上MetaMask钱包！", { duration: 5e3 })
+        message.error("没有连上MetaMask钱包！", { duration: 5e3 })
         return
       }
       account.value = "Base帐户"
@@ -129,20 +94,11 @@ const submit = async () => {
     case "usdt":
       signer = await metaMaskConnPol()
       if(signer == null){
-        message.error("没有联上MetaMask钱包！", { duration: 5e3 })
+        message.error("没有连上MetaMask钱包！", { duration: 5e3 })
         return
       }
       account.value = "Polygon帐户"
       break;
-    case "lark":
-      signer = await metaMaskConnPol()
-      if(signer == null){
-        message.error("没有联上MetaMask钱包！", { duration: 5e3 })
-        return
-      }
-      account.value = "Polygon帐户"
-      break;
-    */
     case "wechatpay":
       break;
     default:
@@ -150,7 +106,7 @@ const submit = async () => {
       message.error("请选择正确的充值方式！", { duration: 5e3 })
       return
   }
-  console.log(5389, "account info:", method.value, account.value)
+  // console.log(5389, "account info:", method.value, account.value)
 
   if(account.value == ''){
     message.error("帐户名不能为空！", { duration: 5e3 })
@@ -173,9 +129,9 @@ const submit = async () => {
   if(method.value == 'wechatpay'){
     navigateTo('/user/createorder')
   } 
-  // else {
-  //   navigateTo('/user/cryptonet')
-  // }
+  else {
+    navigateTo('/user/cryptonet')
+  }
 }
 
 </script>

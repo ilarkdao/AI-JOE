@@ -6,7 +6,7 @@
    </div>
    <div textBox v-if="balance">
     <div mb-4>积分余额： {{ balance }}</div>
-    <div mb-4>邮箱： {{ user.email }}</div>
+    <div v-if="user.email" mb-4>邮箱： {{ user.email }}</div>
     <div mb-4>注册时间： {{ TimesToLocal(user.created) }}</div>
    </div>
 </div>

@@ -1,10 +1,13 @@
 # AI·JOE，人工智能助手
 
 ## 官网
+![aijoe](https://img.ilark.io/img/202511/1762351376690-1dz94.jpg)
+
 [https://ai.ilark.io](https://ai.ilark.io)
 
 ## 简介
-AI·Joe，人工智能助手，辅助工作流。它是基于多个语言模型和开发框架， 比如：Openai API、Google Gemini、Google PaLM2 Chat、Meta Llama、Yi 34B Chat、 Midjourney、Stable Diffusion、LangChain等。致力于打造优秀的人工智能助手和自动化的工作流程。 它开箱即用，对具体的应用场景和参数都做了调优。 在不断升级的过程中，将迎来更加智能化的未来！
+AI·Joe，人工智能助手，辅助工作流。它是基于多个语言模型和开发框架， 比如：Openai API、Google Gemini、Google PaLM2 Chat、Meta Llama、Yi 34B Chat、 Stable Diffusion、LangChain等。致力于打造优秀的人工智能助手和自动化的工作流程。 它开箱即用，对具体的应用场景和参数都做了调优。 在不断升级的过程中，将迎来更加智能化的未来！
+
 
 
 ## 项目本地运行
@@ -14,9 +17,14 @@ yarn dev
 http://localhost:3000
 ```
 
+## V11更新
+2025.11.2  全面接入加密系统: MetaMask登录和USDT充值
+
+## V10更新
+2025.7.18 上线Agent, 智能体集成了网络搜索、爬虫、代码解释器等功能，擅长解决一些复杂的问题。
 
 ## V9更新
-v9.0  
+2025.2.24 v9.0  
 - AI·Joe此次增加视觉图像功能，可以上传图片后与图片交互，图片转文字，图片转prompt，以及网页截图转前端代码！
 - 删除了加密充值功能模块。
 - 删除了社区Meme版块。

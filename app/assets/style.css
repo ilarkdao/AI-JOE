@@ -35,7 +35,8 @@
   padding: 7px;
 }
 .ai {
-  background: #ebf0f1;
+  /* background: #ebf0f1; */
+  background: #f3f4f6; 
 }
 .chat {
   width: 100%;

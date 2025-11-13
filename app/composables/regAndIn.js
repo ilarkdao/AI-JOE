@@ -8,6 +8,7 @@ export const getCaptcha = async (url) => {
   }
   return await useFetch(url, obj)
 }
+
 export const registerApi = async (url, option) => {
   try {
     let response = await fetch(baseURL+url, option)
@@ -24,6 +25,7 @@ export const registerApi = async (url, option) => {
     message.error("错误！\n"+error, { duration: 5e3 })
   }
 }
+
 export const loginApi = async (url, option) => {
   try {
     let response = await fetch(baseURL+url, option)
@@ -46,6 +48,7 @@ export const loginApi = async (url, option) => {
     message.error("错误！\n"+error, { duration: 5e3 })
   }
 }
+
 export const updatepw = async (url, option) => {
   try {
     let response = await fetch(baseURL+url, option)
@@ -61,6 +64,48 @@ export const updatepw = async (url, option) => {
     } else {
         let err = await response.text()
         message.error("修改密码错误！\n"+err, { duration: 5e3 })
+    }
+  } catch (error) {
+    message.error("错误！\n"+error, { duration: 5e3 })
+  }
+}
+
+//metamask login
+export const getNonce = async (url, option) => {
+  try {
+    let response = await fetch(baseURL+url, option)
+    if(response.ok){
+      let res = await response.json()
+      return res.nonce
+    } else {
+        let err = await response.text()
+        message.error("错误！\n"+err, { duration: 5e3 })
+    }
+  } catch (error) {
+    message.error("错误！\n"+error, { duration: 5e3 })
+  }
+}
+
+export const metalogin = async (url, option) => {
+  try {
+    let response = await fetch(baseURL+url, option)
+    if(response.ok){
+      let res = await response.json()
+      // 成功后保存到cookie, 跳转
+      let token = useCookie('token', {maxAge: 60 * 60 * 24 * 30})  //30天
+      token.value = res.token
+      // console.log(256, token)
+      let user = useCookie('user', {maxAge: 60 * 60 * 24 * 30})
+      user.value = res.newUser
+      user.value.username = formatAddr(user.value.username)
+      user.value.email = ""
+      // console.log(1699, "user", user.value)
+      message.success("登录成功", { duration: 5e3 })
+      navigateTo("/user/info")
+
+    } else {
+        let err = await response.text()
+        message.error("错误！\n"+err, { duration: 5e3 })
     }
   } catch (error) {
     message.error("错误！\n"+error, { duration: 5e3 })

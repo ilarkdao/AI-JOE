@@ -12,13 +12,12 @@
   },
   "dependencies": {
     "@iconify-json/mdi": "^1.2.3",
-    "@unocss/nuxt": "^66.5.2",
+    "@unocss/nuxt": "^66.5.4",
     "ethers": "^6.15.0",
-    "ipfs-http-client": "^60.0.1",
     "naive-ui": "^2.43.1",
-    "nuxt": "^4.1.2",
-    "unocss": "^66.5.2",
+    "nuxt": "^4.2.0",
+    "unocss": "^66.5.4",
     "vue": "^3.5.22",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.6.3"
   }
 }

@@ -117,7 +117,7 @@
 </template>
 
 <script setup>
-import { NUpload, NPopover, NInput, NButton, NSpace, NRadio, NSwitch, NImage, createDiscreteApi } from "naive-ui"
+import { NUpload, NPopover, NInput, NSelect, NButton, NSpace, NRadio, NRadioGroup, NSwitch, NImage, createDiscreteApi } from "naive-ui"
 
 import loading from '/loading.gif'
 let { message } = createDiscreteApi(["message"])

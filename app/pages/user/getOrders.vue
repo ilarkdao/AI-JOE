@@ -1,5 +1,19 @@
 <template>
 <div px-2 lg:px-20 pt-5>
+  <!-- Polygon充值记录 -->
+   <div v-if="polygonhistory">
+    <div text-center>
+      <h2>Base / Polygon充值记录</h2>   
+    </div>
+    <div v-for="(item,index) in polygonhistory" :key="index" border-dashed border-1 text-3.2 mb-2>
+        <div text-2.5>hash： {{ item.hash }}</div>
+        <div>充值币种： {{ item.pay_method}}</div>
+        <div>充值地址： {{ item.pay_account}}</div>
+        <div>充值积分： {{ item.amount }}</div>
+        <div>支付时间： {{ TimesToLocal(item.created) }}</div> 
+    </div>
+   </div>
+
    <!-- 支付宝 / 微信充值记录 -->
    <div v-if="history">
     <div text-center>
@@ -34,10 +48,9 @@ definePageMeta({
 })
 
 const history = ref(null)
-// const polygonhistory = ref(null)
+const polygonhistory = ref(null)
 let loadingFlag = ref(true)
 //获取Polygon订单
-/*
 const getPolygonHistory = async () => {
   let { data, pending, error } = await getHttp('/polygon/userorders', token.value)
   // console.log(566, "getPolygonHistory", data.value)
@@ -59,7 +72,6 @@ const getPolygonHistory = async () => {
   }
   polygonhistory.value = data.value.polygonhistory
 }
-*/
 
 //获取支付宝订单
 const getHistory = async () => {
@@ -84,6 +96,7 @@ const getHistory = async () => {
   history.value = data.value.payhistory
 }
 if(process.client){
+  getPolygonHistory()
   getHistory()
 }
 </script>
